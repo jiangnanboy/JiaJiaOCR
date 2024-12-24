@@ -26,7 +26,7 @@
 
 #### Getting started
 
-项目核心源码由java17开发。部署的web由springboot3.x开发，前端为streamlit。
+项目核心源码由java17开发。
 
 目前测试阶段，此项目部署在linux下进行测试，地址为：http://117.72.40.129:8001/
 
