@@ -24,7 +24,7 @@
 
 目前开源的OCR推理以python开发为主，对于Java用户来説，要么调用OCR的exe文件要么调用OCR的dll文件，但这样做不太便捷。所以本项目使用Java实现一套OCR推理系统，不需要调用exe或者dll文件。方便Java用户调试和不同平台部署的需求。
 
-右边请下载JiaJiaOCR1.0版本的jar包，放入自己的项目中使用。
+右边releases请下载JiaJiaOCR1.0版本的jar包，放入自己的项目中使用。
 
 #### Getting started
 
