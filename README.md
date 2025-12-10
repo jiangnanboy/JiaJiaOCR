@@ -22,9 +22,19 @@
 
 #### About
 
-目前开源的OCR推理以python开发为主，对于Java用户来説，要么调用OCR的exe文件要么调用OCR的dll文件，但这样做不太便捷。所以本项目使用Java实现一套OCR推理系统，不需要调用exe或者dll文件。方便Java用户调试和不同平台部署的需求。
+目前开源的OCR推理以python开发为主，对于Java用户来説，要么调用OCR的exe文件要么调用OCR的dll文件，但这样做不太便捷。所以本项目使用Java实现一套基于cpu的OCR推理系统，不需要调用exe或者dll文件。方便Java用户调试和不同平台部署的需求。
 
-右边releases请下载JiaJiaOCR1.0版本的jar包，放入自己的项目中使用。
+右边releases请下载JiaJiaOCR2.0版本的jar包，放入自己的项目中使用。
+
+目录2.0版本支持以下功能：
+
+1.通用OCR
+
+2.手写OCR
+
+3.版面检测
+
+4.表格检测与识别
 
 #### Getting started
 
@@ -32,6 +42,7 @@
 
 2.可在wins和linux x86环境中运行
 
+基中模型的加载采用懒加载方式：JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();用到什么功能会加载相应模型。
 
 ```java
 import com.jiajia.common_object.*;
@@ -54,11 +65,24 @@ import java.util.List;
 public class JaJaOCR {
 
     public static void main(String...args) {
-        String imgPath = "38.jpg";
-//        generalOCRTest(imgPath);
-        textLineDetText(imgPath);
+        String imgPath = "38.jpg";       
+//        generalOCRTest(imgPath); # 通用OCR
+//        handwrittingOCRTest(imgPath); # 手写OCR
+        layoutDetTest(imgPath); # 版面检测
+//        tableDetTest(imgPath); # 表格检测
+//        tableRecTest(imgPath); # 表格识别
+//        tableDetRecTest(imgPath); # 表格检测与识别
+//        textLineDetText(imgPath); # 文本行检测
+
     }
 
+    public static void layoutDetTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<Layout> layoutList = jiaJiaOCR.detectLayout(imgPath);
+        Mat img = Imgcodecs.imread(imgPath);
+        drawPredictions(img, layoutList);
+        Imgcodecs.imwrite("38-detect.jpg", img);
+    }
 
     public static void generalOCRTest(String imgPath) {
         JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
@@ -67,7 +91,35 @@ public class JaJaOCR {
 
     }
 
-    
+    public static void handwrittingOCRTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<Pair<Text, Box>> pairList = jiaJiaOCR.recognizeHandwrittenText(imgPath);
+        System.out.println(pairList);
+    }
+
+    public static void tableDetTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<DetectionResult> detectionResultList = jiaJiaOCR.detectTables(imgPath);
+        System.out.println(detectionResultList);
+        Mat mat = Imgcodecs.imread(imgPath);
+        Mat resultMat = drawResults(mat, detectionResultList);
+        Imgcodecs.imwrite("table_md.jpg", resultMat);
+    }
+
+    public static void tableRecTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<Pair<Text, Box>> ocrResultList = jiaJiaOCR.recognizeGeneralText(imgPath);
+        TableResult tableResult = jiaJiaOCR.recognizeTableFromOCR(imgPath, ocrResultList);
+        System.out.println(tableResult);
+
+    }
+
+    public static void tableDetRecTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<TableResult> tableResultList = jiaJiaOCR.recognizeTables(imgPath);
+        System.out.println(tableResultList);
+    }
+
     public static void textLineDetText(String imgPath) {
         JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
         Boxes boxes = jiaJiaOCR.detectTextLines(imgPath);
@@ -177,6 +229,22 @@ public class JaJaOCR {
 1.文本行的坐标
 
 2.识别的文字
+
+3.版面元素的坐标
+
+4.表格识别后的html格式
+
+识别后的图：
+
+<img src="generalocr.png" />
+
+<img src="handwrittingocr.png" />
+
+<img src="layout.png" />
+
+<img src="table_det.png" />
+
+<img src="table_rec.png" />
 
 #### Contact
 如有想法或问题，可联系我：
