@@ -19,10 +19,23 @@ public class JaJaOCR {
 
     public static void main(String...args) {
         String imgPath = "38.jpg";
-//        generalOCRTest(imgPath);
-        textLineDetText(imgPath);
+//        generalOCRTest(imgPath); # 通用ocr
+//        handwrittingOCRTest(imgPath); # 手写OCR
+        layoutDetTest(imgPath); # 版面检测
+//        tableDetTest(imgPath); # 表格检测
+//        tableRecTest(imgPath); # 表格识别
+//        tableDetRecTest(imgPath); # 表格检测与识别
+//        textLineDetText(imgPath); # 文本行检测
+
     }
 
+    public static void layoutDetTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<Layout> layoutList = jiaJiaOCR.detectLayout(imgPath);
+        Mat img = Imgcodecs.imread(imgPath);
+        drawPredictions(img, layoutList);
+        Imgcodecs.imwrite("38-detect.jpg", img);
+    }
 
     public static void generalOCRTest(String imgPath) {
         JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
@@ -31,7 +44,35 @@ public class JaJaOCR {
 
     }
 
-    
+    public static void handwrittingOCRTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<Pair<Text, Box>> pairList = jiaJiaOCR.recognizeHandwrittenText(imgPath);
+        System.out.println(pairList);
+    }
+
+    public static void tableDetTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<DetectionResult> detectionResultList = jiaJiaOCR.detectTables(imgPath);
+        System.out.println(detectionResultList);
+        Mat mat = Imgcodecs.imread(imgPath);
+        Mat resultMat = drawResults(mat, detectionResultList);
+        Imgcodecs.imwrite("table_md.jpg", resultMat);
+    }
+
+    public static void tableRecTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<Pair<Text, Box>> ocrResultList = jiaJiaOCR.recognizeGeneralText(imgPath);
+        TableResult tableResult = jiaJiaOCR.recognizeTableFromOCR(imgPath, ocrResultList);
+        System.out.println(tableResult);
+
+    }
+
+    public static void tableDetRecTest(String imgPath) {
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+        List<TableResult> tableResultList = jiaJiaOCR.recognizeTables(imgPath);
+        System.out.println(tableResultList);
+    }
+
     public static void textLineDetText(String imgPath) {
         JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
         Boxes boxes = jiaJiaOCR.detectTextLines(imgPath);
