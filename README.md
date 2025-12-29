@@ -10,15 +10,19 @@
 
 全功能版本为：JiaJiaOCR 2.0 +，功能有通用OCR识别，手写 OCR、版面检测、表格检测与识别等。
 
-## 一、1.0 版本，轻量级
-JiaJiaOCR 1.0 仅实现了通用OCR功能，在releases中可下载1.0 + 版，大小为21MB。
+## 一、1.0 + 版本，轻量版
+JiaJiaOCR 1.0 + 仅实现了通用OCR功能，在releases中可下载1.0 + 版，大小为21MB。
 
-JiaJiaOCR-1.0.1版本针对英文OCR的空白识别成null进行了优化，改为返回空串。
+1.JiaJiaOCR-1.0.1版本针对英文OCR的空白识别成null进行了优化，改为返回空串。
 
-## 二、2.0 版本核心升级亮点
-JiaJiaOCR 2.0 在功能、性能、易用性上实现三重突破，大小为200多MB。
+2.JiaJiaOCR-1.0.2版本增加了对pdf的识别。
 
-JiaJiaOCR-2.0.1 版本针对英文OCR的空白识别成null进行了优化，改为返回空串。
+## 二、2.0 + 版本，全功能版
+JiaJiaOCR 2.0 + 在功能、性能、易用性上实现三重突破，大小为200多MB。
+
+1.JiaJiaOCR-2.0.1 版本针对英文OCR的空白识别成null进行了优化，改为返回空串。
+
+2.JiaJiaOCR-2.0.2 版本增加了对pdf的识别。
 
 直击更多实际业务场景需求：
 
@@ -40,11 +44,11 @@ JiaJiaOCR-2.0.1 版本针对英文OCR的空白识别成null进行了优化，改
 
 ## 三、四大核心功能详解
 
-JiaJiaOCR 2.0 以 "全场景文本解析" 为核心，四大功能覆盖从单字识别到文档结构化的完整需求：
+JiaJiaOCR 2.0 + 以 "全场景文本解析" 为核心，四大功能覆盖从单字识别到文档结构化的完整需求：
 
 ### 1. 通用 OCR：印刷体识别标杆
 
-延续 1.0 版本的高精度印刷体识别能力，支持中英文、数字、符号混合识别，返回文本内容与坐标，适用于发票、标签、广告牌等印刷体场景。
+延续 1.0 + 版本的高精度印刷体识别能力，支持中英文、数字、符号混合识别，返回文本内容与坐标，适用于发票、标签、广告牌等印刷体场景。
 
 ### 2. 手写 OCR：突破手写识别难点
 
@@ -100,16 +104,23 @@ JiaJiaOCR 2.0 以 "全场景文本解析" 为核心，四大功能覆盖从单�
         <artifactId>api</artifactId>
         <version>0.31.0</version>
     </dependency>
+   <!-- 操作pdf -->
+    <dependency>
+        <groupId>org.apache.pdfbox</groupId>
+        <artifactId>pdfbox</artifactId>
+        <version>3.0.2</version>
+    </dependency>
+
 </dependencies>
 ```
 
 #### 第二步：下载核心 Jar 包
 
-前往 GitHub 仓库[JiaJiaOCR](https://github.com/jiangnanboy/JiaJiaOCR) releases 页面，下载 JiaJiaOCR 2.0 版本的 jar 包，放入项目依赖目录并引入。该 Jar 包 200MB（集成了模型文件）。
+前往 GitHub 仓库[JiaJiaOCR](https://github.com/jiangnanboy/JiaJiaOCR) releases 页面，下载 JiaJiaOCR 2.0 + 版本的 jar 包，放入项目依赖目录并引入。该 Jar 包 200MB（集成了模型文件）。
 
 ### 3. 完整功能示例代码
 
-以下代码包含 2.0 版本所有核心功能的调用示例，注释清晰可直接复制使用，需将`imgPath`替换为实际图片路径：
+以下代码包含 2.0 + 版本所有核心功能的调用示例（如果使用1.0+的轻量版，只需调用通用OCR功能即可），注释清晰可直接复制使用，需将`imgPath`替换为实际图片路径：
 
 ```
 import com.jiajia.common_object.*;
@@ -123,6 +134,8 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
+import static com.jiajia.common_object.PdfConvert.convertPdfToImages;
+
 /**
  * JiaJiaOCR 2.0 全功能示例
  * @author sy
@@ -140,7 +153,9 @@ public class JiaJiaOCR2Demo {
         // tableRecTest(imgPath);      // 5.表格识别（输出HTML）
         // tableDetRecTest(imgPath);   // 6.表格检测+识别（一站式）
         // textLineDetText(imgPath);   // 7.文本行检测（带可视化）
+        // pdfOCR();                   // 8.这是pdf识别示例 
     }
+
     /**
      * 1. 通用OCR（印刷体识别）
      * @param imgPath 图片路径
@@ -227,6 +242,23 @@ public class JiaJiaOCR2Demo {
         Imgcodecs.imwrite("textline_result.jpg", img);
         System.out.println("文本行检测结果：" + textLines);
     }
+
+    /**
+     * 8. pdf识别
+     * @param imgPath 图片路径
+     */
+    public static void pdfOCR() throws IOException, OrtException {
+        String pdfPath = "How_To.pdf";
+        String pdfOutputDir = "pdf_image"; // pdf转为图片的保存目录
+        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
+
+        List<String> pdfPathList = convertPdfToImages(pdfPath, pdfOutputDir);
+        for(String pdfImgPath:pdfPathList) {
+            List<Pair<Text, Box>> pairList = jiaJiaOCR.recognizeGeneralText(pdfImgPath);
+            System.out.println(pairList);
+        }
+    }
+
     // ------------------- 可视化工具方法 -------------------
     /**
      * 绘制版面检测结果
