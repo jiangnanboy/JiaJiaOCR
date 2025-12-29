@@ -245,7 +245,6 @@ public class JiaJiaOCR2Demo {
 
     /**
      * 8. pdf识别
-     * @param imgPath 图片路径
      */
     public static void pdfOCR() throws IOException, OrtException {
         String pdfPath = "How_To.pdf";
