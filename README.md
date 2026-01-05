@@ -98,6 +98,8 @@
 
 前往 GitHub 仓库[JiaJiaOCR](https://github.com/jiangnanboy/JiaJiaOCR) releases 页面，下载 JiaJiaOCR 2.0 + 版本的 jar 包，放入项目依赖目录并引入。该 Jar 包 200MB（集成了模型文件）。
 
+JiaJiaOCR 1.0+，只需使用通用OCR及PDF识别功能即可。
+
 ### 💻 完整功能示例代码
 
 ```java
@@ -115,9 +117,9 @@ import java.util.List;
 import static com.jiajia.common_object.PdfConvert.convertPdfToImages;
 
 /**
- * JiaJiaOCR 2.0 全功能示例
+ * JiaJiaOCR 2.0 + 全功能示例
  * @author sy
- * @date 2025/12/4 15:56
+ * @date 2025/12/4 19:56
  */
 public class JiaJiaOCR2Demo {
     public static void main(String...args) {
@@ -304,7 +306,7 @@ public class JiaJiaOCR2Demo {
 
 ## 📊 关键返回结果说明
 
-JiaJiaOCR 2.0 提供结构化、易解析的返回结果，覆盖不同功能场景需求：
+JiaJiaOCR 2.0 + 提供结构化、易解析的返回结果，覆盖不同功能场景需求：
 
 | 功能模块            | 核心返回内容      | 数据格式说明                                       |
 | --------------- | ----------- | -------------------------------------------- |
