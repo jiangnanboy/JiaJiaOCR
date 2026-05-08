@@ -1,6 +1,6 @@
 # JiaJiaOCR
 
-[![中文 README](https://img.shields.io/badge/中文-README-red?style=flat-square)](README.md)
+[![中文 README](https://img.shields.io/badge/中文-README-red?style=flat-square)](README_CN.md)
 
 ## 🚀 Java OCR Solution
 
