@@ -99,7 +99,7 @@ Rare pure\-Java end\-to\-end table pipeline: table region detection → cell seg
 
 ### 📦 Add Maven Dependencies
 
-Shared pom\.xml dependency for all editions:
+Shared pom\.xml dependency for 2.1.0 editions:
 
 ```XML
 <dependencies>
