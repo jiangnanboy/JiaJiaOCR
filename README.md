@@ -530,23 +530,23 @@ JiaJiaOCR v2\.1\.0 provides standardized structured return values with upgraded 
 
 ### 📝 General Printed OCR
 
-![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzgzYTUyZGNkOTVjZDdmYmMzZDk1NDgxNDA0YjczYjZfY2I4N2UyYjMwY2E2M2Y1NzllYjY3ZWVmMThhYTQwY2ZfSUQ6NzY0ODIzMDE3MTUzMDc0Mjc2Nl8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
+<img src="generalocr.png" alt="通用OCR效果" width="800"/>
 
 ### ✍️ Handwriting OCR
 
-![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTQ3MGRkNjdlODVhMjJhZjA4NGEwM2Y3Mzg3ZWZmYzVfMzZmNDAzZGRiMjc4NjhkOTBmYWNjYmUyN2NmMjg3YTZfSUQ6NzY0ODIzMDE3MDgwMDk5OTM4OF8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
+<img src="handwrittingocr.png" alt="手写OCR效果" width="800"/>
 
 ### 📋 Document Layout Analysis
 
-![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzdhZDUwZTYwNmI3YjljZDVlNGYyMWUzNjRiNWRmYzZfNDlmNzE3YWU3NDM3OWJlZjQyYjdhYjYwNmQ4MzA1YzBfSUQ6NzY0ODIzMDE3NDU0MjAyMzY2M18xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
+<img src="layout.png" alt="版面检测效果" width="800"/>
 
 ### 📊 Table Region Detection
 
-![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjU2NWRlMDYxMjJiM2Y2ZWIwOTQ2Y2ZiYzE1MThiN2VfNzNhNWUyZTljOGQ0ZDBmZjAyZGE3MGE0YWI0ZjA3MDRfSUQ6NzY0ODIzMDE3NDY4MDQ1MjAzMl8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
+<img src="table_det.png" alt="表格检测效果" width="800"/>
 
 ### 📈 Structured Table Parsing
 
-![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzUzMWQ3MGZjM2ZjMWVlNDFhZjY3YzBhMmMwNzQ4ODBfMDU1MDc1NjRhMmZjOGQwNzkwMjY1YmViNTRkNDYwM2JfSUQ6NzY0ODIzMDE3MzMwMDY3MzUyNF8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
+<img src="table_rec.png" alt="表格识别效果" width="800"/>
 
 ---
 
