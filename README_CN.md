@@ -95,7 +95,7 @@
 
 ### 📦 引入项目依赖
 
-所有版本通用Maven核心依赖，在项目pom\.xml中引入：
+2.1.0版本通用Maven核心依赖，在项目pom\.xml中引入：
 
 ```xml
 <dependencies>
