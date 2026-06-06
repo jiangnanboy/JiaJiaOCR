@@ -4,628 +4,564 @@
 
 ## 🚀 Java OCR Solution
 
-In the process of OCR technology implementation, Java developers often face the dilemma of **"prosperous Python ecosystem, difficult Java integration"** — either relying on JNI to call external exe/dll files, or encountering endless pitfalls in cross-platform deployment.
+Java developers always struggle with OCR integration pain points: the Python OCR ecosystem is mature, while Java lacks convenient native solutions\. Traditional Java OCR implementations rely on JNI to invoke external EXE/DLL binaries, leading to painful cross\-platform deployment\.
 
-**JiaJiaOCR brings you a revolutionary breakthrough!** 🎉
+**JiaJiaOCR brings a revolutionary solution for Java OCR implementation\!** 🎉
 
-This project will synchronously update and upgrade lightweight and full-featured versions:
+This project features pure Java implementation, lightweight footprint and comprehensive capabilities with zero complicated configuration for out\-of\-box usage\. Two major editions are maintained continuously to satisfy diverse business requirements\.
 
+### 📌 Edition Overview
 
+|Edition|Size|Core Features|Application Scenarios|Runtime Requirement|
+|---|---|---|---|---|
+|**🔥 Lite Edition \(1\.0\+\)**|21MB\+|General OCR, PDF OCR|Quick integration, resource\-limited environment, basic text extraction|JDK8\+|
+|**⚡ Full Edition \(2\.0\+ / 2\.1\.0\)**|200MB\+|General OCR \+ Handwriting OCR \+ Layout Analysis \+ Table Recognition \+ PDF OCR; v2\.1\.0 adds memory leak fix, table JSON output \& task cancellation|Enterprise document processing, complex structured document parsing, bulk batch recognition|v2\.0\.x: JDK8\+ / **v2\.1\.0: JDK11\+ \(Mandatory\)**|
 
-| Version                            | Size   | Core Features                                                        | Applicable Scenarios                                       |
-| ---------------------------------- | ------ | -------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **🔥 Lightweight Edition (1.0+)**  | 21MB+  | General OCR Recognition                                              | Rapid integration, resource-constrained environments       |
-| **⚡ Full-Featured Edition (2.0+)** | 200MB+ | General OCR + Handwritten OCR + Layout Detection + Table Recognition | Enterprise-level applications, complex document processing |
+---
 
+## 📦 Release Changelog
 
+### 🔥 Lite Edition \(1\.0\+\) \- Compact \& Minimal
 
-***
+- ✅ **v1\.0\.1**: Optimize blank English OCR result to return empty string instead of `null` to avoid NPE
 
-## 📦 Version Update Overview
+- ✅ **v1\.0\.2**: Add multi\-page PDF recognition support
 
-### 🔥 Lightweight Edition (1.0+) - Streamlined & Efficient
+### ⚡ Full Edition Update Log
 
+#### v2\.0\.x Base Version
 
+- ✅ **v2\.0\.1**: Fix empty English recognition to return empty string instead of `null`
 
-* ✅ **v1.0.1** - Optimized blank recognition for English OCR → returns empty string instead of null
+- ✅ **v2\.0\.2**: Integrate PDF document OCR capability
 
-* ✅ **v1.0.2** - Added PDF recognition support
+- 🚀 Performance Boost: Implement lazy model loading to reduce initial memory overhead
 
-### ⚡ Full-Featured Edition (2.0+) - Comprehensive Functions
+- 🎯 Feature Expansion: Introduce handwriting OCR, document layout detection, full table detection \& recognition
 
+- 📊 Result Upgrade: Return bounding box coordinates for layout elements \+ HTML formatted table result
 
+#### ✨ v2\.1\.0 Latest Stable Release \(Recommended\)
 
-* ✅ **v2.0.1** - Optimized blank recognition for English OCR → returns empty string instead of null
+**Mandatory Runtime: JDK 11 or higher**
 
-* ✅ **v2.0.2** - Added PDF recognition support
+Core improvements \& new features:
 
-* 🚀 **40% Performance Improvement** - Model lazy loading mechanism, loaded on demand
+- 🔧 Memory Optimization: Fix multiple memory leaks to enhance stability for long\-running \& bulk recognition jobs
 
-* 🎯 **Function Expansion** - Added handwritten OCR, layout detection, table detection and recognition
+- 📋 Enhanced Table Output: Apart from original HTML format, add structured JSON output containing precise row \& column information for downstream secondary development
 
-* 📊 **Result Upgrade** - Added layout element coordinates, table HTML format output
+- ⏹️ New Task Cancellation API: Support aborting long\-running recognition tasks dynamically for flexible business exception handling
 
+- 🧵 Multi\-threading Improvement: Optimize concurrent batch processing for multi\-image \& multi\-file workloads
 
+---
 
-***
+## 🎯 Four Core Capabilities
 
-## 🎯 Detailed Explanation of Four Core Functions
+### 1\. 📝 General OCR: High\-precision Printed Text Recognition
 
-### 1. 📝 General OCR: Benchmark for Printed Text Recognition
+Deliver stable high accuracy for mixed Chinese, English, digits and symbols\. Returns recognized text content, confidence score and 8\-point quadrilateral coordinates\. Ideal for invoices, labels, posters and standard printed documents\.
 
-Inherits the high-precision printed text recognition capability of version 1.0+, supports mixed recognition of Chinese, English, numbers and symbols, returns text content and coordinates, suitable for printed text scenarios such as invoices, labels, billboards, etc.
+### 2\. ✍️ Handwriting OCR: Optimized for Chinese Manuscript
 
-### 2. ✍️ Handwritten OCR: Breaking Through the Difficulties of Handwriting Recognition
+Custom\-trained model for Chinese handwriting covering neat script \& casual cursive handwriting\. Perfect for handwritten note digitization and manual form data entry\. **Test accuracy reaches over 92% on standard handwriting dataset**\.
 
-Added a specially optimized model for Chinese handwriting, supports common handwriting styles such as neat handwriting and cursive handwriting, solves the pain points of digitizing handwritten notes and entering handwritten forms, with a recognition accuracy rate of **over 92%** (tested with standard handwriting samples).
+### 3\. 📋 Document Layout Analysis
 
-### 3. 📋 Layout Detection: Intelligent Analysis of Document Structure
+Automatically categorize document components including title, paragraph, image and table with classification label, confidence value and bounding box coordinates\. Enables PDF\-to\-Word conversion, ancient document digitization and structured document archiving\.
 
-Can automatically identify layout elements such as titles, paragraphs, images and tables in documents, returns the coordinates and type labels of each element, provides a basis for document structured processing, suitable for scenarios such as PDF to Word, ancient book digitization, etc.
+### 4\. 📊 Table Detection \& Structured Recognition: Pure\-Java Table Parsing Solution
 
-### 4. 📊 Table Detection and Recognition: Direct Extraction of Structured Data
+Rare pure\-Java end\-to\-end table pipeline: table region detection → cell segmentation → content recognition\.
 
-A rare pure Java table recognition solution in the industry, supports the whole process of table area detection, cell segmentation and content recognition, and finally outputs structured results in HTML format, which can be directly rendered as tables or imported into Excel, completely getting rid of the tedious manual entry of table data.
+**v2\.1\.0 Major Upgrade**: Dual output formats:
 
+- HTML: Directly rendered on web pages
 
+- Structured JSON: Contains detailed row/column metadata for Excel/database importing, eliminating manual table transcription entirely\.
 
-***
+---
 
-## 🛠️ Quick Start: 5-Minute Integration Tutorial
+## 🛠️ Quick Start: Integrate within 5 Minutes
 
-### 📋 Environment Preparation
+### 📋 Environment Prerequisite
 
+- Lite Edition 1\.0\+: JDK8\+
 
+- Full Edition 2\.0\.x: JDK8\+
 
-* **Development Environment**: JDK 8 or above
+- **Full Edition 2\.1\.0: JDK11\+ \(Required\)**
 
-* **Runtime Environment**: Windows 10+, Linux x86 _64
+- Supported OS: Windows 10\+, Linux x86\_64
 
-* **Dependency Management**: Maven (Recommended)
+- Build Tool: Maven \(Recommended\)
 
-### 📦 Import Dependencies and Jar Packages
+### 📦 Add Maven Dependencies
 
-#### Step 1: Add Maven Dependencies
+Shared pom\.xml dependency for all editions:
 
-
-
-```
- <dependencies>
-
-     <!-- ONNX Runtime: Core dependency for model inference -->
-
-     <dependency>
-
-         <groupId>com.microsoft.onnxruntime </groupId>
-
-         <artifactId>onnxruntime </artifactId>
-
-         <version>1.19.0 </version>
-
-     </dependency>
-
-     <!-- DJL MXNet Engine: Deep learning framework support -->
-
-     <dependency>
-
-         <groupId>ai.djl.mxnet </groupId>
-
-         <artifactId>mxnet-engine </artifactId>
-
-         <version>0.31.0 </version>
-
-     </dependency>
-
-     <!-- OpenCV: Image processing dependency -->
-
-     <dependency>
-
-         <groupId>ai.djl.opencv </groupId>
-
-         <artifactId>opencv </artifactId>
-
-         <version>0.31.0 </version>
-
-     </dependency>
-
-     <!-- DJL Core API: Model management -->
-
-     <dependency>
-
-         <groupId>ai.djl </groupId>
-
-         <artifactId>api </artifactId>
-
-         <version>0.31.0 </version>
-
-     </dependency>
-
-    <!-- PDF manipulation -->
-
-     <dependency>
-
-         <groupId>org.apache.pdfbox </groupId>
-
-         <artifactId>pdfbox </artifactId>
-
-         <version>3.0.2 </version>
-
-     </dependency>
-
- </dependencies>
+```XML
+<dependencies>
+    <dependency>
+        <groupId>com.microsoft.onnxruntime</groupId>
+        <artifactId>onnxruntime</artifactId>
+        <version>1.19.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openpnp</groupId>
+        <artifactId>opencv</artifactId>
+        <version>4.9.0-0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.pdfbox</groupId>
+        <artifactId>pdfbox</artifactId>
+        <version>3.0.2</version>
+    </dependency>
+</dependencies>
 ```
 
-#### Step 2: Download Core Jar Package
+### 📥 Import Core Jar Package
 
-Go to the releases page of the GitHub repository [JiaJiaOCR](https://github.com/jiangnanboy/JiaJiaOCR), download the jar package of JiaJiaOCR 2.0+ version, put it into the project dependency directory and import it. The jar package is 200MB (integrated with model files).
+Download target jar from [GitHub Release Page](https://github.com/jiangnanboy/JiaJiaOCR/releases):
 
-JiaJiaOCR 1.0+, just use general OCR and PDF recognition.
+- Lite 1\.0\+: Small\-size jar for basic general \& PDF OCR only
 
-### 💻 Complete Function Example Code
+- Full 2\.1\.0 \(Recommended\): 200MB\+ pre\-packed with all inference models and latest features
 
+Place downloaded jar into project lib directory and add to build path\.
 
-```
-import com.jiajia.common _object. *;
+### 💻 Full Demo Code for v2\.1\.0
 
+Covers all core features including new JSON table export, runtime cancel \& multi\-thread batch processing; directly compilable \& runnable:
+
+See details：JiaJiaOCRFullTest.java
+
+```Java
+import com.jiajia.common_object.*;
 import com.jiajia.core.JiaJiaOCR;
-
 import org.apache.commons.lang3.tuple.Pair;
-
 import org.opencv.core.Mat;
-
 import org.opencv.core.MatOfPoint;
-
 import org.opencv.core.Point;
-
 import org.opencv.core.Scalar;
-
 import org.opencv.imgcodecs.Imgcodecs;
-
 import org.opencv.imgproc.Imgproc;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.List;
 
-import java.io.IOException;
-
-import ai.onnxruntime.OrtException;
-
-import static com.jiajia.common _object.PdfConvert.convertPdfToImages;
-
-/ * *
-
-  * JiaJiaOCR 2.0 Full-Feature Demo
-
-  * @author sy
-
-  * @date 2025/12/4 19:56
-
-  */
-
-public class JiaJiaOCR2Demo {
-
-    public static void main(String...args) {
-
-        String imgPath = "test.jpg"; // Replace with your image path
-
-        // 🚀 Unlock functions on demand (uncomment to use)
-
-        // generalOCRTest(imgPath);    // 1. General OCR (Printed Text)
-
-        // handwrittingOCRTest(imgPath); // 2. Handwritten OCR
-
-        // layoutDetTest(imgPath);     // 3. Layout Detection (with visualization)
-
-        // tableDetTest(imgPath);      // 4. Table Detection (with visualization)
-
-        // tableRecTest(imgPath);      // 5. Table Recognition (output HTML)
-
-        // tableDetRecTest(imgPath);   // 6. Table Detection + Recognition (One-stop)
-
-        // textLineDetText(imgPath);   // 7. Text Line Detection (with visualization)
-
-        // try {
-
-        //     pdfOCR();               // 8. PDF Recognition Demo 
-
-        // } catch (IOException | OrtException e) {
-
-        //     e.printStackTrace();
-
-        // }
-
-    }
-
-    / * *
-
-      * 1. General OCR (Printed Text Recognition)
-
-      * @param imgPath Image path
-
-      */
-
-    public static void generalOCRTest(String imgPath) {
-
-        // Lazy initialization: no model loaded at this time
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        // Corresponding model is loaded only when the function is called
-
-        List <Pair <Text, Box>> result = jiaJiaOCR.recognizeGeneralText(imgPath);
-
-        // Output: Text content + Quadrilateral coordinates
-
-        System.out.println("General OCR Result: " + result);
-
-    }
-
-    
-
-    / * *
-
-      * 2. Handwritten OCR Recognition
-
-      * @param imgPath Image path
-
-      */
-
-    public static void handwrittingOCRTest(String imgPath) {
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        List <Pair <Text, Box>> result = jiaJiaOCR.recognizeHandwrittenText(imgPath);
-
-        System.out.println("Handwritten OCR Result: " + result);
-
-    }
-
-    
-
-    / * *
-
-      * 3. Layout Detection (Identify elements such as title/paragraph/table, with visualization)
-
-      * @param imgPath Image path
-
-      */
-
-    public static void layoutDetTest(String imgPath) {
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        List <Layout> layoutList = jiaJiaOCR.detectLayout(imgPath);
-
-        // Visualize detection results and save
-
-        Mat img = Imgcodecs.imread(imgPath);
-
-        drawLayoutPredictions(img, layoutList);
-
-        Imgcodecs.imwrite("layout _result.jpg", img);
-
-        System.out.println("Layout detection result saved, element information: " + layoutList);
-
-    }
-
-    
-
-    / * *
-
-      * 4. Table Detection (Only detect table area, with visualization)
-
-      * @param imgPath Image path
-
-      */
-
-    public static void tableDetTest(String imgPath) {
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        List <DetectionResult> tableList = jiaJiaOCR.detectTables(imgPath);
-
-        // Visualize table area
-
-        Mat img = Imgcodecs.imread(imgPath);
-
-        Mat resultMat = drawTableResults(img, tableList);
-
-        Imgcodecs.imwrite("table _detect _result.jpg", resultMat);
-
-        System.out.println("Table detection area: " + tableList);
-
-    }
-
-    
-
-    / * *
-
-      * 5. Table Recognition (Extract table structure based on general OCR results, output HTML)
-
-      * @param imgPath Image path
-
-      */
-
-    public static void tableRecTest(String imgPath) {
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        // First get general OCR results
-
-        List <Pair <Text, Box>> ocrResult = jiaJiaOCR.recognizeGeneralText(imgPath);
-
-        // Extract table structure based on OCR results
-
-        TableResult tableResult = jiaJiaOCR.recognizeTableFromOCR(imgPath, ocrResult);
-
-        // Output HTML format (can be directly rendered)
-
-        System.out.println("Table Recognition HTML Result: " + tableResult.getHtmlContent());
-
-    }
-
-    
-
-    / * *
-
-      * 6. One-stop call for table detection + recognition
-
-      * @param imgPath Image path
-
-      */
-
-    public static void tableDetRecTest(String imgPath) {
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        // Get table structured results in one step
-
-        List <TableResult> tableResults = jiaJiaOCR.recognizeTables(imgPath);
-
-        for (TableResult table : tableResults) {
-
-            System.out.println("Table HTML: " + table.getHtmlContent());
-
-            System.out.println("Table Coordinates: " + table.getBox());
-
+import static com.jiajia.common_object.PdfConvert.convertPdfToImages;
+
+/**
+ * JiaJiaOCR v2.1.0 Full Function Demo
+ * Requires JDK11+, contains all newly added features
+ * Features covered: General OCR | Handwriting OCR | Layout Detection | Textline Detection | Table Parse | PDF OCR | Task Cancel | Multi-thread Batch
+ */
+public class JiaJiaOCRFullTest {
+
+    // ========== Configure your local file paths ==========
+    private static final String GENERAL_OCR_IMG = "general_ocr.jpg";
+    private static final String HANDWRITING_IMG = "handwriting_ocr.jpg";
+    private static final String LAYOUT_IMG = "layout.jpg";
+    private static final String TABLE_DET_REC_IMG = "table_det_rec.jpg";
+    private static final String TABLE_REC_IMG = "table_rec.png";
+    private static final String PDF_PATH = "pdf.pdf";
+    private static final String OUTPUT_DIR = "test_output";
+
+    public static void main(String[] args) throws Exception {
+        new File(OUTPUT_DIR).mkdirs();
+
+        System.out.println("========================================");
+        System.out.println("     JiaJiaOCR 2.1.0 Full Feature Test");
+        System.out.println("========================================\n");
+
+        // 1. General printed OCR
+        if (new File(GENERAL_OCR_IMG).exists()) {
+            System.out.println("【Test 1】General OCR - Printed Text Recognition");
+            testGeneralOCR(GENERAL_OCR_IMG);
+            System.out.println();
         }
 
-    }
-
-    
-
-    / * *
-
-      * 7. Text Line Detection (with visualization)
-
-      * @param imgPath Image path
-
-      */
-
-    public static void textLineDetText(String imgPath) {
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        Boxes textLines = jiaJiaOCR.detectTextLines(imgPath);
-
-        // Visualize text lines
-
-        Mat img = Imgcodecs.imread(imgPath);
-
-        drawTextLinePredictions(img, textLines);
-
-        Imgcodecs.imwrite("textline _result.jpg", img);
-
-        System.out.println("Text Line Detection Result: " + textLines);
-
-    }
-
-    / * *
-
-      * 8. PDF Recognition
-
-      */
-
-    public static void pdfOCR() throws IOException, OrtException {
-
-        String pdfPath = "How _To.pdf";
-
-        String pdfOutputDir = "pdf _image"; // Directory to save images converted from PDF
-
-        JiaJiaOCR jiaJiaOCR = JiaJiaOCR.builder();
-
-        List <String> pdfPathList = convertPdfToImages(pdfPath, pdfOutputDir);
-
-        for(String pdfImgPath:pdfPathList) {
-
-            List <Pair <Text, Box>> pairList = jiaJiaOCR.recognizeGeneralText(pdfImgPath);
-
-            System.out.println(pairList);
-
+        // 2. Handwriting OCR
+        if (new File(HANDWRITING_IMG).exists()) {
+            System.out.println("【Test 2】Handwriting OCR");
+            testHandwritingOCR(HANDWRITING_IMG);
+            System.out.println();
         }
 
-    }
-
-    // ------------------- Visualization Tool Methods -------------------
-
-    / * *
-
-      * Draw layout detection results
-
-      */
-
-    public static void drawLayoutPredictions(Mat img, List <Layout> detLayout) {
-
-        for(Layout layout : detLayout) {
-
-            int [] bbox = layout.getBbox();
-
-            // Draw rectangle (red, line width 2)
-
-            Imgproc.rectangle(img, new Point(bbox [0], bbox [1]), 
-
-                             new Point(bbox [2], bbox [3]), new Scalar(0, 0, 255), 2);
-
-            // Draw element label (green text)
-
-            String label = layout.getLabel();
-
-            Imgproc.putText(img, label, new Point(bbox [0]+5, bbox [1]-10), 
-
-                           Imgproc.FONT _HERSHEY _SIMPLEX, 0.7, new Scalar(0, 255, 0), 2);
-
+        // 3. Document Layout Analysis
+        if (new File(LAYOUT_IMG).exists()) {
+            System.out.println("【Test 3】Document Layout Detection");
+            testLayoutDetection(LAYOUT_IMG);
+            System.out.println();
         }
 
-    }
-
-    
-
-    / * *
-
-      * Draw table detection results
-
-      */
-
-    public static Mat drawTableResults(Mat image, List <DetectionResult> results) {
-
-        Mat resultImg = image.clone();
-
-        for (DetectionResult result : results) {
-
-            String label = "Table: " + String.format("%.2f", result.getConfidence());
-
-            // Draw label and rectangle
-
-            Imgproc.putText(resultImg, label, new Point(result.getRect().x, result.getRect().y-10),
-
-                           Imgproc.FONT _HERSHEY _SIMPLEX, 1.0, new Scalar(0, 0, 255), 2);
-
-            Imgproc.rectangle(resultImg, new Point(result.getRect().x, result.getRect().y),
-
-                           new Point(result.getRect().x+result.getRect().width, 
-
-                                     result.getRect().y+result.getRect().height),
-
-                           new Scalar(0, 0, 255), 2);
-
+        // 4. Text line detection
+        if (new File(GENERAL_OCR_IMG).exists()) {
+            System.out.println("【Test 4】Text Line Location Detection");
+            testTextLineDetection(GENERAL_OCR_IMG);
+            System.out.println();
         }
 
-        return resultImg;
-
-    }
-
-    
-
-    / * *
-
-      * Draw text line detection results (polygon adaptation for any angle)
-
-      */
-
-    public static void drawTextLinePredictions(Mat img, Boxes detBoxes) {
-
-        List <Box> boxList = detBoxes.getBoxes();
-
-        for(Box box : boxList) {
-
-            double [] pos = box.getLinePosition();
-
-            // Build quadrilateral vertices
-
-            Point [] points = new Point [4];
-
-            points [0] = new Point(pos [0], pos [1]);
-
-            points [1] = new Point(pos [2], pos [3]);
-
-            points [2] = new Point(pos [4], pos [5]);
-
-            points [3] = new Point(pos [6], pos [7]);
-
-            // Draw polygon (red, line width 1)
-
-            MatOfPoint polygon = new MatOfPoint(points);
-
-            List <MatOfPoint> polygons = new ArrayList<>();
-
-            polygons.add(polygon);
-
-            Imgproc.polylines(img, polygons, true, new Scalar(0, 0, 255), 1);
-
+        // 5. Pure table region detection
+        if (new File(TABLE_DET_REC_IMG).exists()) {
+            System.out.println("【Test 5】Table Region Detection");
+            testTableDetection(TABLE_DET_REC_IMG);
+            System.out.println();
         }
 
+        // 6. Table parse from existing OCR result
+        if (new File(TABLE_REC_IMG).exists()) {
+            System.out.println("【Test 6】Structured Table Recognition (HTML+JSON)");
+            testTableRecognition(TABLE_REC_IMG);
+            System.out.println();
+        }
+
+        // 7. One-shot table detect + parse
+        if (new File(TABLE_DET_REC_IMG).exists()) {
+            System.out.println("【Test 7】All-in-one Table Detect & Parse");
+            testTableDetRec(TABLE_DET_REC_IMG);
+            System.out.println();
+        }
+
+        // 8. New Feature: Task Cancel Demo
+        if (new File(GENERAL_OCR_IMG).exists()) {
+            System.out.println("【Test 8】New Feature: Recognition Task Cancellation");
+            testCancellation(GENERAL_OCR_IMG);
+            System.out.println();
+        }
+
+        // 9. New Feature: Multi-thread Batch Processing
+        if (new File(GENERAL_OCR_IMG).exists()) {
+            System.out.println("【Test 9】New Feature: Multi-thread Batch Recognition");
+            testMultiThreadBatch(new String[]{GENERAL_OCR_IMG, GENERAL_OCR_IMG, GENERAL_OCR_IMG});
+            System.out.println();
+        }
+
+        //10. Multi-page PDF OCR
+        if (new File(PDF_PATH).exists()) {
+            System.out.println("【Test10】Multi-page PDF Bulk OCR");
+            testPdfOCR(PDF_PATH);
+            System.out.println();
+        }
+
+        System.out.println("========================================");
+        System.out.println("         All Test Cases Finished!");
+        System.out.println("========================================");
     }
 
+    // 1. General Printed OCR
+    public static void testGeneralOCR(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            List<Pair<Text, Box>> results = ocr.recognizeGeneralText(imgPath);
+            System.out.println("  Total recognized text blocks: " + results.size());
+            for (int i = 0; i < results.size(); i++) {
+                Pair<Text, Box> pair = results.get(i);
+                System.out.println("  Text " + (i + 1) + "：" + pair.getLeft().getText());
+            }
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 2. Handwriting OCR
+    public static void testHandwritingOCR(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            List<Pair<Text, Box>> results = ocr.recognizeHandwrittenText(imgPath);
+            System.out.println("  Total handwriting blocks: " + results.size());
+            for (Pair<Text, Box> pair : results) {
+                System.out.println("  Handwritten Content：" + pair.getLeft().getText());
+            }
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 3. Layout Detection & Visualization
+    public static void testLayoutDetection(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            List<Layout> layouts = ocr.detectLayout(imgPath);
+            System.out.println("  Detected layout elements count: " + layouts.size());
+
+            Mat img = Imgcodecs.imread(imgPath);
+            for (Layout layout : layouts) {
+                int x0 = (int) layout.getBbox()[0];
+                int y0 = (int) layout.getBbox()[1];
+                int x1 = (int) layout.getBbox()[2];
+                int y1 = (int) layout.getBbox()[3];
+
+                Imgproc.rectangle(img, new Point(x0, y0), new Point(x1, y1),
+                        new Scalar(0, 0, 255), 2);
+                Imgproc.putText(img, layout.getLabel(),
+                        new Point(Math.max(0, x0 + 5), Math.max(0, y0 - 10)),
+                        Imgproc.FONT_HERSHEY_SIMPLEX, 0.7,
+                        new Scalar(0, 255, 0), 2, Imgproc.LINE_AA);
+
+                System.out.println("  Element Type：" + layout.getLabel() +
+                        "，Confidence：" + String.format("%.2f", layout.getConfidence()));
+            }
+
+            String outputPath = OUTPUT_DIR + "/layout_result.jpg";
+            Imgcodecs.imwrite(outputPath, img);
+            System.out.println("  Rendered image saved to: " + outputPath);
+            img.release();
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 4. Text Line Detection
+    public static void testTextLineDetection(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            Boxes boxes = ocr.detectTextLines(imgPath);
+            List<Box> boxList = boxes.getBoxes();
+            System.out.println("  Detected text line count: " + boxList.size());
+
+            Mat img = Imgcodecs.imread(imgPath);
+            for (Box box : boxList) {
+                Point[] points = new Point[4];
+                float[] pos = box.getLinePosition();
+                points[0] = new Point(pos[0], pos[1]);
+                points[1] = new Point(pos[2], pos[3]);
+                points[2] = new Point(pos[4], pos[5]);
+                points[3] = new Point(pos[6], pos[7]);
+
+                MatOfPoint polygon = new MatOfPoint(points);
+                List<MatOfPoint> polygons = new ArrayList<>();
+                polygons.add(polygon);
+                Imgproc.polylines(img, polygons, true, new Scalar(0, 0, 255), 2);
+            }
+
+            String outputPath = OUTPUT_DIR + "/textline_result.jpg";
+            Imgcodecs.imwrite(outputPath, img);
+            System.out.println("  Rendered image saved to: " + outputPath);
+            img.release();
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 5. Table Region Detection Only
+    public static void testTableDetection(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            List<DetectionResult> results = ocr.detectTables(imgPath);
+            System.out.println("  Detected table count: " + results.size());
+
+            Mat img = Imgcodecs.imread(imgPath);
+            for (DetectionResult result : results) {
+                String label = result.getClassLabel() + ": " +
+                        String.format("%.2f", result.getConfidence());
+                Imgproc.putText(img, label,
+                        new Point(result.getRect().x, result.getRect().y - 10),
+                        Imgproc.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(0, 0, 255), 2);
+                Imgproc.rectangle(img,
+                        new Point(result.getRect().x, result.getRect().y),
+                        new Point(result.getRect().x + result.getRect().width,
+                                result.getRect().y + result.getRect().height),
+                        new Scalar(0, 0, 255), 2);
+            }
+
+            String outputPath = OUTPUT_DIR + "/table_detection_result.jpg";
+            Imgcodecs.imwrite(outputPath, img);
+            System.out.println("  Rendered image saved to: " + outputPath);
+            img.release();
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 6. Table Parse based on precomputed OCR
+    public static void testTableRecognition(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            System.out.println("  Step1: Run general OCR to extract text");
+            List<Pair<Text, Box>> ocrResults = ocr.recognizeGeneralText(imgPath);
+            System.out.println("  Total OCR text blocks: " + ocrResults.size());
+
+            System.out.println("  Step2: Parse structured table data");
+            TableResult tableResult = ocr.recognizeTableFromOCR(imgPath, ocrResults);
+
+            // Original HTML output
+            System.out.println("  [HTML Output] " + tableResult.getHtml());
+            System.out.println("  Cost: " + String.format("%.3f", tableResult.getElapse()) + " sec");
+
+            // v2.1.0 New: Structured JSON with row/column info
+            String tableJson = tableResult.getTableJson();
+            System.out.println("  [New JSON Structured Data] " + tableJson);
+
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 7. One-shot table detect + parse
+    public static void testTableDetRec(String imgPath) throws Exception {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            List<TableResult> tableResults = ocr.recognizeTables(imgPath);
+            System.out.println("  Total parsed tables: " + tableResults.size());
+
+            for (int i = 0; i < tableResults.size(); i++) {
+                TableResult result = tableResults.get(i);
+                System.out.println("\n  --- Table " + (i + 1) + " Result ---");
+                System.out.println("  HTML Content：" + result.getHtml());
+                System.out.println("  Cost：" + String.format("%.3f", result.getElapse()) + " sec");
+
+                ParsedTableData data = result.getParsedTableData();
+                System.out.println("  Table Size：" + data.getRows() + " rows × " + data.getColumns() + " columns");
+                System.out.println("  Structured JSON：" + result.getTableJson());
+            }
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 8. Task Cancel Demo (v2.1.0 New Feature)
+    public static void testCancellation(String imgPath) {
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        CancellationToken token = new CancellationToken();
+
+        // Trigger cancel in separate thread after short delay
+        new Thread(() -> {
+            try {
+                Thread.sleep(100);
+                System.out.println("  [Cancel Thread] Send abort request");
+                token.cancel();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        try {
+            List<Pair<Text, Box>> results = ocr.recognizeGeneralText(imgPath, token);
+            System.out.println("  Task finished normally, result count: " + results.size());
+        } catch (Exception e) {
+            System.out.println("  Recognition task aborted, message: " + e.getMessage());
+        } finally {
+            ocr.close();
+        }
+    }
+
+    // 9. Multi-thread Batch Recognition Demo
+    public static void testMultiThreadBatch(String[] imgPaths) {
+        List<Thread> threads = new ArrayList<>();
+
+        for (int i = 0; i < imgPaths.length; i++) {
+            final int index = i;
+            final String path = imgPaths[i];
+            Thread t = new Thread(() -> {
+                try {
+                    System.out.println("  [Thread " + index + "] Start processing");
+                    JiaJiaOCR ocr = JiaJiaOCR.builder();
+                    try {
+                        List<Pair<Text, Box>> results = ocr.recognizeGeneralText(path);
+                        System.out.println("  [Thread " + index + "] Done, detected " + results.size() + " text blocks");
+                    } finally {
+                        ocr.close();
+                    }
+                } catch (Exception e) {
+                    System.out.println("  [Thread " + index + "] Failed: " + e.getMessage());
+                }
+            });
+            threads.add(t);
+            t.start();
+        }
+
+        // Wait all worker threads complete
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("  All batch jobs completed");
+    }
+
+    //10. Multi-page PDF OCR
+    public static void testPdfOCR(String pdfPath) throws IOException, Exception {
+        String pdfOutputDir = OUTPUT_DIR + "/pdf_images";
+        new File(pdfOutputDir).mkdirs();
+
+        System.out.println("  Converting PDF to page images...");
+        List<String> pdfImgPaths = convertPdfToImages(pdfPath, pdfOutputDir);
+        System.out.println("  Total PDF pages: " + pdfImgPaths.size());
+
+        JiaJiaOCR ocr = JiaJiaOCR.builder();
+        try {
+            for (int i = 0; i < pdfImgPaths.size(); i++) {
+                String imgPath = pdfImgPaths.get(i);
+                System.out.println("  Processing Page " + (i + 1) + "/" + pdfImgPaths.size());
+                List<Pair<Text, Box>> results = ocr.recognizeGeneralText(imgPath);
+                System.out.println("  Page " + (i + 1) + " recognized blocks: " + results.size());
+            }
+        } finally {
+            ocr.close();
+        }
+    }
 }
 ```
 
+---
 
-***
+## 📊 Return Data Structure Reference
 
-## 📊 Key Return Result Description
+JiaJiaOCR v2\.1\.0 provides standardized structured return values with upgraded dual HTML\+JSON table output:
 
-JiaJiaOCR 2.0 provides structured and easy-to-parse return results, covering the needs of different functional scenarios:
+|Module|Returned Content|Data Definition|
+|---|---|---|
+|General / Handwriting OCR|Text content, confidence, quadrilateral coordinates|`List<Pair<Text, Box>>`<br>Text: content \+ confidence; Box: 8\-point quad coordinates|
+|Layout Analysis|Component type, bounding box, confidence|`List<Layout>`<br>label\(category: title/paragraph/table\.\.\.\), bbox rectangle \& confidence|
+|Table Detection|Table bounding box \+ confidence|`List<DetectionResult>`<br>table rectangle region and detection confidence|
+|Table Recognition \(v2\.1\.0 Enhanced\)|Table content, bounding box, row/column metadata|`TableResult`<br>Dual output: HTML for web render \+ JSON with detailed row \& column structure|
 
+---
 
+## 🖼️ Demo Preview
 
-| Function Module               | Core Return Content                   | Data Format Description                                                                          |
-| ----------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| General OCR / Handwritten OCR | Text content, coordinates, confidence | `List<Pair<Text, Box>>`, Text contains content and confidence, Box contains 8 vertex coordinates |
-| Layout Detection              | Element type, coordinates, confidence | `List<Layout>`, contains label (title/paragraph, etc.), bbox (rectangular coordinates)           |
-| Table Detection               | Table area, confidence                | `List<DetectionResult>`, contains rectangular coordinates and confidence                         |
-| Table Recognition             | Table structure, content, coordinates | `TableResult`, contains htmlContent (HTML format), box (coordinates)                             |
+### 📝 General Printed OCR
 
+![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzgzYTUyZGNkOTVjZDdmYmMzZDk1NDgxNDA0YjczYjZfY2I4N2UyYjMwY2E2M2Y1NzllYjY3ZWVmMThhYTQwY2ZfSUQ6NzY0ODIzMDE3MTUzMDc0Mjc2Nl8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
 
-***
+### ✍️ Handwriting OCR
 
-## 🖼️ Effect Demonstration
+![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTQ3MGRkNjdlODVhMjJhZjA4NGEwM2Y3Mzg3ZWZmYzVfMzZmNDAzZGRiMjc4NjhkOTBmYWNjYmUyN2NmMjg3YTZfSUQ6NzY0ODIzMDE3MDgwMDk5OTM4OF8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
 
-### 📝 General OCR Effect
+### 📋 Document Layout Analysis
 
+![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzdhZDUwZTYwNmI3YjljZDVlNGYyMWUzNjRiNWRmYzZfNDlmNzE3YWU3NDM3OWJlZjQyYjdhYjYwNmQ4MzA1YzBfSUQ6NzY0ODIzMDE3NDU0MjAyMzY2M18xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
 
-![General OCR Effect](generalocr.png)
+### 📊 Table Region Detection
 
-### ✍️ Handwritten OCR Effect
+![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjU2NWRlMDYxMjJiM2Y2ZWIwOTQ2Y2ZiYzE1MThiN2VfNzNhNWUyZTljOGQ0ZDBmZjAyZGE3MGE0YWI0ZjA3MDRfSUQ6NzY0ODIzMDE3NDY4MDQ1MjAzMl8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
 
+### 📈 Structured Table Parsing
 
-![Handwritten OCR Effect](handwrittingocr.png)
+![Image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzUzMWQ3MGZjM2ZjMWVlNDFhZjY3YzBhMmMwNzQ4ODBfMDU1MDc1NjRhMmZjOGQwNzkwMjY1YmViNTRkNDYwM2JfSUQ6NzY0ODIzMDE3MzMwMDY3MzUyNF8xNzgwNzQyMzY4OjE3ODA4Mjg3NjhfVjM)
 
-### 📋 Layout Detection Effect
+---
 
+## 📞 Contact Info
 
-![Layout Detection Effect](layout.png)
+For technical discussion, feature suggestion or bug feedback:
 
-### 📊 Table Detection Effect
+- 🐙 GitHub: [jiangnanboy](https://github.com/jiangnanboy)
 
+- 💬 QQ: 2229029156
 
-![Table Detection Effect](table_det.png)
+- 📧 Email: 2229029156@qq\.com
 
-### 📈 Table Recognition Effect
+## ⭐ Support This Project
 
+If this project helps your development, kindly leave a ⭐ Star, your encouragement drives continuous optimization ❤️
 
-![Table Recognition Effect](table_rec.png)
-
-
-***
-
-## 📞 Contact Me
-
-If you have any ideas or questions, feel free to contact me:
-
-
-1. 🐙 **GitHub**: [jiangnanboy](https://github.com/jiangnanboy)
-
-2. 💬 **QQ**: 2229029156
-
-3. 📧 **Email**: 2229029156@qq.com
-
-
-***
-
-## ⭐ Support Us
-
-If this project is helpful to you, please give us a **Star**! Your support is the driving force for our continuous improvement ❤️
-
-
-![GitHub stars](https://img.shields.io/github/stars/jiangnanboy/JiaJiaOCR?style=social)
+[![GitHub stars](https://img.shields.io/github/stars/jiangnanboy/JiaJiaOCR?style=social)](https://github.com/jiangnanboy/JiaJiaOCR/stargazers)
