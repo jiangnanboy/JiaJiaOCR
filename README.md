@@ -93,7 +93,7 @@ Rare pure\-Java end\-to\-end table pipeline: table region detection → cell seg
 
 - **Full Edition 2\.1\.0: JDK11\+ \(Required\)**
 
-- Supported OS: Windows 10\+, Linux x86\_64
+- Supported OS: Windows 10\+, Linux x86\_64, arm
 
 - Build Tool: Maven \(Recommended\)
 
