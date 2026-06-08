@@ -501,9 +501,6 @@ public class JiaJiaOCRFullTest {
         }
     }
 }
-```
-```Markdown
----
 
 ## 📊 核心返回结果说明
 
