@@ -305,7 +305,7 @@ sharedOcr.recognizeGeneralText("general.png");   // warm up: load models once
 
 | General OCR | Handwritten OCR |
 | --- | --- |
-| <img src="generalocr.png" alt="general OCR" width="400"/> | <img src="handwritingocr.png" alt="handwriting OCR" width="400"/> |
+| <img src="generalocr.png" alt="general OCR" width="400"/> | <img src="handwrittingocr.png" alt="handwriting OCR" width="400"/> |
 
 | Layout detection | Table detection | Table recognition |
 | --- | --- | --- |

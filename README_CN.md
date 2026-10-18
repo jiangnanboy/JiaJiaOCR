@@ -305,7 +305,7 @@ sharedOcr.recognizeGeneralText("general.png");   // 预热，完成模型加载
 
 | 通用 OCR | 手写 OCR |
 | --- | --- |
-| <img src="generalocr.png" alt="通用OCR效果" width="400"/> | <img src="handwritingocr.png" alt="手写OCR效果" width="400"/> |
+| <img src="generalocr.png" alt="通用OCR效果" width="400"/> | <img src="handwrittingocr.png" alt="手写OCR效果" width="400"/> |
 
 | 版面检测 | 表格检测 | 表格识别 |
 | --- | --- | --- |
