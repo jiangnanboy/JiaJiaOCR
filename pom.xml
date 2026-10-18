@@ -4,97 +4,286 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- 1. 项目基本信息和元数据 -->
+    <!-- Maven Central 要求必须提供这些信息 -->
     <groupId>org.example</groupId>
-    <artifactId>test_jiajiaocr</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>JiaJia</artifactId>
+    <!-- 版本号不能是 -SNAPSHOT，必须是一个正式版本 -->
+    <version>2.2.0</version>
+    <packaging>jar</packaging>
+
+    <name>JiaJia OCR</name>
+    <description>A powerful Java library for general OCR, handwritten OCR, layout detection, and table recognition using ONNX models.</description>
+    <url>https://github.com/jiangnanboy/JiaJiaOCR</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>jiangnanboy</name>
+            <email>2229029156@qq.com</email>
+            <organization>jiangnanboy</organization>
+            <organizationUrl>https://github.com/jiangnanboy</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/jiangnanboy/JiaJiaOCR.git</connection>
+        <developerConnection>scm:git:ssh://github.com:jiangnanboy/JiaJiaOCR.git</developerConnection>
+        <url>http://github.com/jiangnanboy/JiaJiaOCR/tree/main</url>
+    </scm>
 
     <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- 统一管理依赖版本 -->
+        <lombok.version>1.18.36</lombok.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <poi.version>5.3.0</poi.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <fastjson2.version>2.0.53</fastjson2.version>
+        <onnxruntime.version>1.19.0</onnxruntime.version>
+        <opencv.version>4.9.0-0</opencv.version>
+        <jsoup.version>1.15.3</jsoup.version>
+        <slf4j-nop.version>2.0.16</slf4j-nop.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- Maven 依赖（自动打包进 JAR） -->
+        <!-- Lombok 是编译时依赖，不应传递给最终用户 -->
         <dependency>
-            <groupId>com.microsoft.onnxruntime</groupId>
-            <artifactId>onnxruntime</artifactId>
-            <version>1.19.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl.mxnet</groupId>
-            <artifactId>mxnet-engine</artifactId>
-            <version>0.31.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl.opencv</groupId>
-            <artifactId>opencv</artifactId>
-            <version>0.31.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>api</artifactId>
-            <version>0.31.0</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.17.0</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
-        <!-- 关键：编译时依赖 JiaJiaOCR.jar（system 范围，仅用于编译） -->
         <dependency>
-            <groupId>com.jiajia</groupId>
-            <artifactId>JiaJiaOCR</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <!-- 本地 JAR 路径：必须存在，否则编译失败 -->
-            <systemPath>${project.basedir}/lib/JiaJiaOCR.jar</systemPath>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>${dom4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons-collections.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
+
+        <!-- ONNX Runtime：模型推理核心依赖 -->
+        <!-- 从1.16.0+开始，onnxruntime自动包含onnxruntime-jni，支持多平台原生库 -->
+        <!-- 支持平台：Windows x64, Linux x64, Linux ARM64, macOS x64, macOS ARM64 -->
+        <!-- 注意：Windows ARM64 需要额外配置（见下方注释） -->
+        <dependency>
+            <groupId>com.microsoft.onnxruntime</groupId>
+            <artifactId>onnxruntime</artifactId>
+            <version>${onnxruntime.version}</version>
+        </dependency>
+
+        <!-- OpenCV：图像处理核心依赖 -->
+        <!-- org.openpnp:opencv 是社区维护的跨平台OpenCV Java绑定，支持多种操作系统和架构 -->
+        <!-- 支持平台：Windows x86/x64, Linux x86/x64/ARM64, macOS x64/ARM64 -->
+        <!-- 通过 nu.pattern.OpenCV.loadLocally() 自动加载当前平台的原生库 -->
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+        </dependency>
+
+        <!-- ==================== 平台特定依赖配置（按需启用） ==================== -->
+        <!-- 如果需要在特定平台运行，可以注释掉上方的通用依赖，改用下方特定平台依赖 -->
+        <!-- 这样可以减小包体积，只包含目标平台的原生库 -->
+
+        <!-- 【方案A】Windows x86_64（默认已包含在通用依赖中） -->
+        <!--
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+            <classifier>windows-x86_64</classifier>
+        </dependency>
+        -->
+
+        <!-- 【方案B】Linux x86_64 -->
+        <!--
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+            <classifier>linux-x86_64</classifier>
+        </dependency>
+        -->
+
+        <!-- 【方案C】Linux ARM64 (aarch64) - 树莓派、ARM服务器等 -->
+        <!--
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+            <classifier>linux-arm64</classifier>
+        </dependency>
+        -->
+
+        <!-- 【方案D】macOS x86_64 -->
+        <!--
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+            <classifier>macosx-x86_64</classifier>
+        </dependency>
+        -->
+
+        <!-- 【方案E】macOS ARM64 (Apple Silicon M1/M2/M3) -->
+        <!--
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+            <classifier>macosx-arm64</classifier>
+        </dependency>
+        -->
+
+        <!-- ==================== Windows ARM64 特殊说明 ==================== -->
+        <!-- ONNX Runtime 官方 Java API 目前不直接支持 Windows ARM64 -->
+        <!-- 如需在 Windows ARM64 (如 Snapdragon) 运行，需要： -->
+        <!-- 1. 手动下载 Windows ARM64 版本的 ONNX Runtime -->
+        <!-- 2. 将 onnxruntime.dll 放到系统 PATH 或项目资源目录 -->
+        <!-- 3. 使用 System.load("path/to/onnxruntime.dll") 手动加载 -->
+        <!-- 参考：https://github.com/microsoft/onnxruntime/releases -->
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j-nop.version}</version>
+        </dependency>
+
+        <!-- POI 传递引入了 log4j-api，这里显式统一版本并桥接到 slf4j，避免 "could not find a logging implementation" 告警 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.24.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.24.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-            <!-- 编译插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
+            <!-- 发布到 Maven Central 的必需插件 -->
 
-            <!-- Shade 插件：打包 Maven 依赖，但排除 JiaJiaOCR.jar -->
+            <!-- 生成 Javadoc，这是强制要求 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <!-- 设置编码 -->
+                    <encoding>UTF-8</encoding>
+                    <charset>UTF-8</charset>
+                    <docencoding>UTF-8</docencoding>
+
+                    <!-- 解决Java 11+的Javadoc问题 -->
+                    <source>${java.version}</source>
+
+                    <!-- 添加额外的Javadoc选项 -->
+                    <additionalJOptions>
+                        <additionalJOption>-J-Duser.language=en</additionalJOption>
+                        <additionalJOption>-J-Duser.country=US</additionalJOption>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
+
+                    <!-- 跳过一些可能导致问题的检查 -->
+                    <failOnError>false</failOnError>
+                </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>attach-javadocs</id>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <artifactSet>
-                                <!-- 关键：排除 JiaJiaOCR.jar（不打包进最终 JAR） -->
-                                <excludes>
-                                    <exclude>com.jiajiaocr:JiaJiaOCR</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <transformers>
-                                <!-- 指定主类 -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>JaJaOCR</mainClass> <!-- 替换为你的主类 -->
-                                </transformer>
-                            </transformers>
-                            <finalName>test-jiajiaocr</finalName>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- GPG 签名，这是强制要求 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 用于部署到 OSSRH (Maven Central的托管仓库) -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.7.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId> <!-- 对应 settings.xml 中的 server id -->
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <!-- 注意：我们故意没有添加 maven-source-plugin，因此不会生成和发布源码包 -->
         </plugins>
     </build>
 </project>

@@ -1,0 +1,30 @@
+# Build output
+target/
+build/
+out/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# ProGuard build artifacts (legacy)
+mapping.txt
+seeds.txt
+usage.txt
+
+# 模型目录（模型走 Releases 分发，不入仓库）
+models/
+src/main/resources/models-release/

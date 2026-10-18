@@ -1,104 +1,80 @@
 # JiaJiaOCR
 
 [![English README](https://img.shields.io/badge/English-README-blue?style=flat-square)](README.md)
+[![GitHub stars](https://img.shields.io/github/stars/jiangnanboy/JiaJiaOCR?style=social)](https://github.com/jiangnanboy/JiaJiaOCR/stargazers)
+[![JDK](https://img.shields.io/badge/JDK-11+-blue?style=flat-square)]()
+[![License](https://img.shields.io/badge/License-Apache%202.0-green?style=flat-square)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-x86__64%20%7C%20ARM-orange?style=flat-square)]()
+[![Inference](https://img.shields.io/badge/Inference-CPU%20Recommended-blueviolet?style=flat-square)]()
 
-## 🚀 Java OCR解决方案
+> **纯 Java 实现的 OCR 引擎** —— 覆盖通用 OCR、手写 OCR、版面检测、表格检测与识别、PDF 识别，轻量、跨平台、开箱即用。
 
-在 OCR 技术落地过程中，Java 开发者常面临 **"Python 生态繁荣，Java 集成困难"** 的困境 —— 要么依赖jni调用 exe/dll 外部文件，要么跨平台部署踩坑不断。
+## ✨ 核心亮点
 
-**JiaJiaOCR 为Java端OCR落地带来革命性突破！** 🎉
+- ☕ **纯 Java**：无需 JNI 调用 EXE/DLL，无需 Python 环境，一个 Jar 搞定。
+- 🧠 **CPU 推理优先**：**本项目推荐使用 CPU 推理**，不依赖 GPU/CUDA，部署门槛极低。
+- 💻 **全平台覆盖**：支持 **x86_64 与 ARM** 架构，适配 **Windows / Linux / macOS**。
+- 🇨🇳 **信创适配**：支持**部分国产信创环境**（麒麟、统信等 x86_64 / ARM 平台）。
+- ⚡ **懒加载设计**：按需加载模型，用到哪个功能才加载哪个，内存友好。
+- 📦 **模型开箱即用**：模型已内置在 Jar 中，也支持用 `-Djiajia.model.dir` 指定外部模型目录。
+- 🧵 **多线程友好**：实例可安全共享，支持并发批量识别。
 
-本项目主打**纯Java实现、轻量高效、功能全面**，无需复杂环境配置，开箱即用，完美适配各类Java项目OCR场景。项目持续迭代更新，目前提供**轻量版**与**全功能版**两大版本，满足不同场景需求。
+## 🖥️ 平台支持
 
-### 📌 版本整体介绍
+| 平台 | 架构 | 支持情况 |
+| --- | --- | --- |
+| Windows | x86_64 | ✅ 支持 |
+| Linux | x86_64 | ✅ 支持 |
+| Linux | ARM64 (aarch64) | ✅ 支持（树莓派、ARM 服务器等） |
+| macOS | x86_64 / ARM64 | ✅ 支持 |
+| 国产信创（麒麟、统信等） | x86_64 / ARM | ✅ 部分支持 |
 
-|版本|大小|核心功能|适用场景|运行环境|
-|---|---|---|---|---|
-|**🔥 轻量版 \(1\.0\+\)**|21MB\+|通用OCR识别、PDF识别|快速集成、资源受限环境、基础文字识别场景|JDK8\+|
-|**⚡ 全功能版 \(2\.0\+ / 2\.1\.0 / 2\.2\.0\)**|200MB\+|通用OCR\+手写OCR\+版面检测\+表格识别\+PDF识别，2\.1\.0新增内存优化、JSON结构化输出、任务取消功能；**2.2.0 全面兼容 x86、ARM 架构，完美适配国产信创环境**|企业级应用、复杂文档处理、表格结构化解析、大批量识别场景、**国产化信创服务器/终端部署**|2\.0\.x：JDK8\+ / **2\.1\.0、2.2.0：JDK11\+**|
+> 推理默认走 **CPU**，当前版本**不依赖 GPU**。更多架构与依赖说明见 [ARM_SUPPORT.md](ARM_SUPPORT.md)。
 
----
+## 🧩 功能总览
 
-## 📦 版本更新日志
+| 功能 | 说明 |
+| --- | --- |
+| 📝 通用 OCR | 中英文、数字、符号混合识别，返回文本、置信度、8 点坐标。 |
+| ✍️ 手写 OCR | 针对中文手写体优化，标准样本识别准确率 **92%+**。 |
+| 📋 版面检测 | 识别标题、段落、图片、表格等版面元素及坐标。 |
+| 📐 文本行检测 | 仅定位文本行位置（不做内容识别）。 |
+| 📊 表格检测 | 定位表格区域及置信度。 |
+| 🧾 表格识别 | 表格结构解析，输出 **HTML** 与结构化 **JSON**（行列数据）。 |
+| 📄 PDF 识别 | 多页 PDF 转图片后批量 OCR。 |
+| ⏹️ 任务取消 | 长耗时识别可中途取消。 |
+| 🧵 多线程批量 | 单实例共享并发处理，支持大批量任务。 |
 
-### 🔥 轻量版 \(1\.0\+\) \- 精简高效
+## ⚡ 性能评估
 
-- ✅ **v1\.0\.1** \- 优化英文OCR空白识别，返回空串而非null，避免空指针异常
+以下为 **CPU 环境**下的参考耗时（**冷启动** = 首次调用、含模型加载；**热启动** = 模型已加载、纯推理）。除多线程批量外，各功能均为**单张图片**的识别耗时；多线程批量为 **3 个线程并发**：
 
-- ✅ **v1\.0\.2** \- 新增PDF文档识别支持，适配多页PDF基础文字提取
+| 功能 | 冷启动 | 热启动（纯推理） |
+| --- | --- | --- |
+| 通用 OCR | 928 ms | 426 ms |
+| 手写 OCR | 1516 ms | 989 ms |
+| 版面检测 | 1572 ms | 910 ms |
+| 文本行检测 | 194 ms | 123 ms |
+| 表格检测 | 748 ms | 478 ms |
+| 表格检测 + 识别（一键） | 1986 ms | 1362 ms |
+| 多线程批量（3 线程） | 预热 686 ms | 总耗时 1411 ms |
 
-### ⚡ 全功能版迭代更新
+PDF 识别（27 页示例）：转图约 10.6s，OCR 约 38.8s（平均每页约 1.4s）。
 
-#### v2\.0\.x 基础版本
+> 以上数值仅供参考，实际耗时会因机器配置与图片内容不同而有所差异。
 
-- ✅ **v2\.0\.1** \- 优化英文OCR空白识别 → 返回空串而非null
+## 🚀 快速开始
 
-- ✅ **v2\.0\.2** \- 新增PDF识别支持
+### 1. 环境要求
 
-- 🚀 **性能升级** \- 引入模型懒加载机制，按需加载模型，降低初始资源占用
+- 轻量版 1.0+ / 全功能版 2.0.x：**JDK 8+**
+- 全功能版 2.1.0 / 2.2.0：**JDK 11+**（推荐）
+- 操作系统：Windows 10+、Linux x86_64、Linux ARM、国产信创系统
+- 构建工具：Maven（推荐）
 
-- 🎯 **功能扩容** \- 新增手写OCR、版面检测、表格检测与识别核心能力
+### 2. 引入依赖
 
-- 📊 **结果升级** \- 新增版面元素坐标、表格HTML格式结构化输出
-
-#### ✨ v2\.1\.0 稳定版
-
-**重要环境要求：JDK11 及以上版本**
-
-核心优化与新增功能：
-
-- 🔧 **内存优化**：修复多处内存泄漏问题，提升大批量、长时间识别任务的稳定性
-
-- 📋 **表格结果升级**：表格识别除原有HTML格式外，新增**行列结构化JSON数据**返回，可直接解析获取精准行列信息，适配二次开发
-
-- ⏹️**新增任务取消能力**：支持识别过程中手动取消长耗时任务，灵活适配业务中断场景
-
-- 🧵 **多线程适配优化**：完善多线程批量识别能力，支持并发处理多文件、多图片识别任务
-
-#### 🆕 v2.2.0 最新推荐版（信创/全平台适配）
-**重要环境要求：JDK11 及以上版本**
-
-- 🖥️ **全架构兼容**：完整支持 **x86_64、ARM** 硬件架构
-- 🇨🇳 **信创环境适配**：深度适配国产操作系统、ARM 信创服务器与终端，满足国产化项目落地要求
-- 🔄 延续 2.1.0 全部能力：内存优化、表格 JSON 结构化、任务取消、多线程并发、全套OCR能力
-
----
-
-## 🎯 四大核心功能详解
-
-### 1\. 📝 通用OCR：印刷体识别标杆
-
-延续全版本高精度印刷体识别能力，支持中英文、数字、符号混合识别，精准返回文本内容、置信度及8点坐标信息，适配发票、标签、广告牌、普通文档等各类印刷体识别场景。
-
-### 2\. ✍️ 手写OCR：突破手写识别难点
-
-针对中文手写体专项优化模型，兼容工整手写、日常连笔手写等主流手写风格，解决手写笔记数字化、手写表单批量录入等行业痛点，标准手写样本测试识别准确率**达92%以上**。
-
-### 3\. 📋 版面检测：文档结构智能解析
-
-自动智能识别文档内标题、段落、图片、表格等各类版面元素，返回元素类型、置信度及矩形坐标信息，为PDF转Word、古籍数字化、文档结构化归档等场景提供底层能力支撑。
-
-### 4\. 📊 表格检测与识别：纯Java结构化解析方案
-
-业内稀缺纯Java无依赖表格识别方案，全程完成表格区域检测、单元格分割、内容识别全流程。
-
-**2\.1\.0及以上版本全新升级**：同时输出 **HTML格式**（可直接网页渲染）和 **JSON结构化数据**（含精准行列信息），支持一键导入Excel、数据库，彻底告别手动表格录入。
-
----
-
-## 🛠️ 快速上手：5分钟集成教程
-
-### 📋 环境适配说明
-
-- 轻量版 1\.0\+：JDK8\+
-- 全功能版 2\.0\.x：JDK8\+
-- **全功能版 2\.1\.0 / 2.2.0：JDK11\+（必填）**
-- 运行系统：Windows 10\+、Linux x86\_64、**Linux ARM、国产信创操作系统**
-- 依赖管理：Maven（推荐）
-
-### 📦 引入项目依赖
-
-2.1.0 / 2.2.0 版本通用Maven核心依赖，在项目pom\.xml中引入：
+在 `pom.xml` 中引入核心依赖：
 
 ```xml
 <dependencies>
@@ -119,437 +95,228 @@
     </dependency>
 </dependencies>
 ```
-📥 核心Jar包引入
-前往 GitHub 仓库 JiaJiaOCR releases 页面，下载对应版本Jar包：
-轻量版1.0+：仅需基础通用OCR、PDF识别功能，体积小巧
-全功能版 2.2.0（推荐）：200MB+，集成全套模型、全架构支持、信创适配及所有高级特性
-下载后将Jar包放入项目依赖目录，完成引入即可使用。
-💻 2.1.0 / 2.2.0 完整功能示例代码
-示例覆盖全部核心功能，包含新版特色：表格JSON结构化输出、任务取消、多线程批量处理等，可直接复制运行测试：
-具体见：JiaJiaOCRFullTest.java
-```Java
+
+> `pdfbox` 仅在需要 PDF 识别时引入。
+
+### 3. 构建 Jar 包
+
+[Releases](https://github.com/jiangnanboy/JiaJiaOCR/releases) 提供**源码包（含模型）**，解压后在项目根目录执行：
+
+```bash
+mvn clean package -DskipTests
+```
+
+构建产物位于 `target/JiaJia-2.2.0.jar`，将其放入你的项目依赖目录即可使用。
+
+### 4. 模型说明
+
+模型**已内置在 Jar 中**（classpath `models/`），默认开箱即用，无需额外配置。
+
+如需使用**外部模型目录**（模型单独分发、热更新等场景），可通过系统属性指定：
+
+```bash
+java -Djiajia.model.dir=/path/to/models -jar yourapp.jar
+```
+
+外部模型目录结构需与内置一致：
+
+```
+models/
+├── text_detection/det.onnx
+├── direction_detection/cls.onnx
+├── text_recognition/rec.onnx
+├── text_recognition/dict.txt
+├── handwriting_rec/rec.onnx
+├── handwriting_rec/dict.txt
+├── layout_analysis/layout.onnx
+└── table_recognition/table_det.onnx
+└── table_recognition/table_reg.onnx
+```
+
+### 5. 最小示例
+
+```java
 import com.jiajia.common_object.*;
 import com.jiajia.core.JiaJiaOCR;
 import org.apache.commons.lang3.tuple.Pair;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.jiajia.common_object.PdfConvert.convertPdfToImages;
-
-/**
- * JiaJiaOCR 2.1.0 / 2.2.0 完整功能测试程序
- * 适配JDK11+，包含新版全部特色功能
- * 功能覆盖：通用OCR、手写OCR、版面检测、文本行检测、表格识别、PDF识别、任务取消、多线程批量处理
- */
-public class JiaJiaOCRFullTest {
-
-    // ==================== 测试资源路径配置（按需修改） ====================
-    private static final String GENERAL_OCR_IMG = "general_ocr.jpg";
-    private static final String HANDWRITING_IMG = "handwriting_ocr.jpg";
-    private static final String LAYOUT_IMG = "layout.jpg";
-    private static final String TABLE_DET_REC_IMG = "table_det_rec.jpg";
-    private static final String TABLE_REC_IMG = "table_rec.png";
-    private static final String PDF_PATH = "pdf.pdf";
-    private static final String OUTPUT_DIR = "test_output";
-
+public class QuickStart {
     public static void main(String[] args) throws Exception {
-        // 创建结果输出目录
-        new File(OUTPUT_DIR).mkdirs();
-
-        System.out.println("========================================");
-        System.out.println("     JiaJiaOCR 完整功能测试");
-        System.out.println("========================================\n");
-
-        // 1. 通用OCR测试
-        if (new File(GENERAL_OCR_IMG).exists()) {
-            System.out.println("【测试1】通用OCR - 印刷体文字识别");
-            testGeneralOCR(GENERAL_OCR_IMG);
-            System.out.println();
-        }
-
-        // 2. 手写OCR测试
-        if (new File(HANDWRITING_IMG).exists()) {
-            System.out.println("【测试2】手写OCR - 手写体文字识别");
-            testHandwritingOCR(HANDWRITING_IMG);
-            System.out.println();
-        }
-
-        // 3. 版面检测测试
-        if (new File(LAYOUT_IMG).exists()) {
-            System.out.println("【测试3】版面检测 - 文档版面智能分析");
-            testLayoutDetection(LAYOUT_IMG);
-            System.out.println();
-        }
-
-        // 4. 文本行检测测试
-        if (new File(GENERAL_OCR_IMG).exists()) {
-            System.out.println("【测试4】文本行检测 - 精准定位文本行位置");
-            testTextLineDetection(GENERAL_OCR_IMG);
-            System.out.println();
-        }
-
-        // 5. 表格检测测试
-        if (new File(TABLE_DET_REC_IMG).exists()) {
-            System.out.println("【测试5】表格检测 - 智能识别表格区域");
-            testTableDetection(TABLE_DET_REC_IMG);
-            System.out.println();
-        }
-
-        // 6. 表格识别测试（新版支持JSON+HTML双格式输出）
-        if (new File(TABLE_REC_IMG).exists()) {
-            System.out.println("【测试6】表格识别 - 结构化数据提取");
-            testTableRecognition(TABLE_REC_IMG);
-            System.out.println();
-        }
-
-        // 7. 表格一键检测+识别
-        if (new File(TABLE_DET_REC_IMG).exists()) {
-            System.out.println("【测试7】表格一站式检测识别");
-            testTableDetRec(TABLE_DET_REC_IMG);
-            System.out.println();
-        }
-
-        // 8. 新版特色：任务取消功能测试
-        if (new File(GENERAL_OCR_IMG).exists()) {
-            System.out.println("【测试8】新版特色：识别任务取消演示");
-            testCancellation(GENERAL_OCR_IMG);
-            System.out.println();
-        }
-
-        // 9. 新版特色：多线程批量处理测试
-        if (new File(GENERAL_OCR_IMG).exists()) {
-            System.out.println("【测试9】新版特色：多线程批量识别演示");
-            testMultiThreadBatch(new String[]{GENERAL_OCR_IMG, GENERAL_OCR_IMG, GENERAL_OCR_IMG});
-            System.out.println();
-        }
-
-        // 10. PDF批量识别测试
-        if (new File(PDF_PATH).exists()) {
-            System.out.println("【测试10】PDF多页批量OCR识别");
-            testPdfOCR(PDF_PATH);
-            System.out.println();
-        }
-
-        System.out.println("========================================");
-        System.out.println("         所有测试执行完毕！");
-        System.out.println("========================================");
-    }
-
-    // 1. 通用印刷体OCR识别
-    public static void testGeneralOCR(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            List<Pair<Text, Box>> results = ocr.recognizeGeneralText(imgPath);
-            System.out.println("  识别结果数量：" + results.size());
-            for (int i = 0; i < results.size(); i++) {
-                Pair<Text, Box> pair = results.get(i);
-                System.out.println("  文本 " + (i + 1) + "：" + pair.getLeft().getText());
+        // 创建实例（自动加载 OpenCV，模型按需懒加载）
+        try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+            List<Pair<Text, Box>> results = ocr.recognizeGeneralText("general.png");
+            for (Pair<Text, Box> item : results) {
+                System.out.println(item.getLeft().getText());
             }
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 2. 手写体OCR识别
-    public static void testHandwritingOCR(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            List<Pair<Text, Box>> results = ocr.recognizeHandwrittenText(imgPath);
-            System.out.println("  识别结果数量：" + results.size());
-            for (Pair<Text, Box> pair : results) {
-                System.out.println("  手写文本：" + pair.getLeft().getText());
-            }
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 3. 文档版面检测
-    public static void testLayoutDetection(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            List<Layout> layouts = ocr.detectLayout(imgPath);
-            System.out.println("  检测到的版面元素数量：" + layouts.size());
-
-            Mat img = Imgcodecs.imread(imgPath);
-            for (Layout layout : layouts) {
-                int x0 = (int) layout.getBbox()[0];
-                int y0 = (int) layout.getBbox()[1];
-                int x1 = (int) layout.getBbox()[2];
-                int y1 = (int) layout.getBbox()[3];
-
-                Imgproc.rectangle(img, new Point(x0, y0), new Point(x1, y1),
-                        new Scalar(0, 0, 255), 2);
-                Imgproc.putText(img, layout.getLabel(),
-                        new Point(Math.max(0, x0 + 5), Math.max(0, y0 - 10)),
-                        Imgproc.FONT_HERSHEY_SIMPLEX, 0.7,
-                        new Scalar(0, 255, 0), 2, Imgproc.LINE_AA);
-
-                System.out.println("  元素：" + layout.getLabel() +
-                        "，置信度：" + String.format("%.2f", layout.getConfidence()));
-            }
-
-            String outputPath = OUTPUT_DIR + "/layout_result.jpg";
-            Imgcodecs.imwrite(outputPath, img);
-            System.out.println("  结果已保存至：" + outputPath);
-            img.release();
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 4. 文本行检测
-    public static void testTextLineDetection(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            Boxes boxes = ocr.detectTextLines(imgPath);
-            List<Box> boxList = boxes.getBoxes();
-            System.out.println("  检测到的文本行数量：" + boxList.size());
-
-            Mat img = Imgcodecs.imread(imgPath);
-            for (Box box : boxList) {
-                Point[] points = new Point[4];
-                float[] pos = box.getLinePosition();
-                points[0] = new Point(pos[0], pos[1]);
-                points[1] = new Point(pos[2], pos[3]);
-                points[2] = new Point(pos[4], pos[5]);
-                points[3] = new Point(pos[6], pos[7]);
-
-                MatOfPoint polygon = new MatOfPoint(points);
-                List<MatOfPoint> polygons = new ArrayList<>();
-                polygons.add(polygon);
-                Imgproc.polylines(img, polygons, true, new Scalar(0, 0, 255), 2);
-            }
-
-            String outputPath = OUTPUT_DIR + "/textline_result.jpg";
-            Imgcodecs.imwrite(outputPath, img);
-            System.out.println("  结果已保存至：" + outputPath);
-            img.release();
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 5. 表格区域检测
-    public static void testTableDetection(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            List<DetectionResult> results = ocr.detectTables(imgPath);
-            System.out.println("  检测到的表格数量：" + results.size());
-
-            Mat img = Imgcodecs.imread(imgPath);
-            for (DetectionResult result : results) {
-                String label = result.getClassLabel() + ": " +
-                        String.format("%.2f", result.getConfidence());
-                Imgproc.putText(img, label,
-                        new Point(result.getRect().x, result.getRect().y - 10),
-                        Imgproc.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(0, 0, 255), 2);
-                Imgproc.rectangle(img,
-                        new Point(result.getRect().x, result.getRect().y),
-                        new Point(result.getRect().x + result.getRect().width,
-                                result.getRect().y + result.getRect().height),
-                        new Scalar(0, 0, 255), 2);
-            }
-
-            String outputPath = OUTPUT_DIR + "/table_detection_result.jpg";
-            Imgcodecs.imwrite(outputPath, img);
-            System.out.println("  结果已保存至：" + outputPath);
-            img.release();
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 6. 表格结构化识别（2.1.0及以上新增JSON行列信息输出）
-    public static void testTableRecognition(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            System.out.println("  步骤1：执行通用OCR提取文本");
-            List<Pair<Text, Box>> ocrResults = ocr.recognizeGeneralText(imgPath);
-            System.out.println("  OCR识别文本总数：" + ocrResults.size());
-
-            System.out.println("  步骤2：解析表格结构化数据");
-            TableResult tableResult = ocr.recognizeTableFromOCR(imgPath, ocrResults);
-
-            // 原有HTML格式结果
-            System.out.println("  【HTML格式结果】" + tableResult.getHtml());
-            System.out.println("  识别耗时：" + String.format("%.3f", tableResult.getElapse()) + " 秒");
-
-            // 新版JSON行列结构化数据
-            String tableJson = tableResult.getTableJson();
-            System.out.println("  【新版JSON行列数据】" + tableJson);
-
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 7. 表格一键检测+识别
-    public static void testTableDetRec(String imgPath) throws Exception {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            List<TableResult> tableResults = ocr.recognizeTables(imgPath);
-            System.out.println("  识别到的表格总数：" + tableResults.size());
-
-            for (int i = 0; i < tableResults.size(); i++) {
-                TableResult result = tableResults.get(i);
-                System.out.println("\n  --- 表格 " + (i + 1) + " 解析结果 ---");
-                System.out.println("  HTML格式：" + result.getHtml());
-                System.out.println("  识别耗时：" + String.format("%.3f", result.getElapse()) + " 秒");
-
-                // 结构化行列信息
-                ParsedTableData data = result.getParsedTableData();
-                System.out.println("  表格规格：" + data.getRows() + "行 × " + data.getColumns() + "列");
-                System.out.println("  JSON结构化数据：" + result.getTableJson());
-            }
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 8. 新版特色：任务取消功能测试
-    public static void testCancellation(String imgPath) {
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        CancellationToken token = new CancellationToken();
-
-        // 子线程延时触发取消任务
-        new Thread(() -> {
-            try {
-                Thread.sleep(100);
-                System.out.println("  【取消线程】已触发任务取消请求");
-                token.cancel();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        try {
-            List<Pair<Text, Box>> results = ocr.recognizeGeneralText(imgPath, token);
-            System.out.println("  识别完成，结果数量：" + results.size());
-        } catch (Exception e) {
-            System.out.println("  任务已成功取消，提示：" + e.getMessage());
-        } finally {
-            ocr.close();
-        }
-    }
-
-    // 9. 新版特色：多线程批量处理测试
-    public static void testMultiThreadBatch(String[] imgPaths) {
-        List<Thread> threads = new ArrayList<>();
-
-        for (int i = 0; i < imgPaths.length; i++) {
-            final int index = i;
-            final String path = imgPaths[i];
-            Thread t = new Thread(() -> {
-                try {
-                    System.out.println("  【线程 " + index + "】开始识别任务");
-                    JiaJiaOCR ocr = JiaJiaOCR.builder();
-                    try {
-                        List<Pair<Text, Box>> results = ocr.recognizeGeneralText(path);
-                        System.out.println("  【线程 " + index + "】任务完成，识别文本数：" + results.size());
-                    } finally {
-                        ocr.close();
-                    }
-                } catch (Exception e) {
-                    System.out.println("  【线程 " + index + "】任务失败：" + e.getMessage());
-                }
-            });
-            threads.add(t);
-            t.start();
-        }
-
-        // 等待所有线程执行完毕
-        for (Thread t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("  所有批量任务执行完毕");
-    }
-
-    // 10. PDF多页批量OCR识别
-    public static void testPdfOCR(String pdfPath) throws IOException, Exception {
-        String pdfOutputDir = OUTPUT_DIR + "/pdf_images";
-        new File(pdfOutputDir).mkdirs();
-
-        System.out.println("  正在转换PDF为图片...");
-        List<String> pdfImgPaths = convertPdfToImages(pdfPath, pdfOutputDir);
-        System.out.println("  PDF总页数：" + pdfImgPaths.size());
-
-        JiaJiaOCR ocr = JiaJiaOCR.builder();
-        try {
-            for (int i = 0; i < pdfImgPaths.size(); i++) {
-                String imgPath = pdfImgPaths.get(i);
-                System.out.println("  正在识别第 " + (i + 1) + "/" + pdfImgPaths.size() + " 页");
-                List<Pair<Text, Box>> results = ocr.recognizeGeneralText(imgPath);
-                System.out.println("  第 " + (i + 1) + " 页识别文本数：" + results.size());
-            }
-        } finally {
-            ocr.close();
         }
     }
 }
 ```
 
-## 📊 核心返回结果说明
+## 📖 功能调用
 
-JiaJiaOCR 2\.1\.0 / 2.2.0 提供标准化、结构化返回数据，适配各类业务解析需求，新版升级表格双格式输出：
+> 以下示例均基于 `JiaJiaOCR` 门面类，公共导入：
+> `import com.jiajia.common_object.*;`、`import com.jiajia.core.JiaJiaOCR;`、`import org.apache.commons.lang3.tuple.Pair;`。
+> 每个功能都支持 `String 路径 / Mat / BufferedImage` 三种入参形式，下面以路径为例。
 
-|功能模块|核心返回内容|数据格式说明|
-|---|---|---|
-|通用 OCR / 手写 OCR|文本内容、坐标、置信度|`List<Pair<Text, Box>>`，Text含文本内容与置信度，Box含8个顶点坐标|
-|版面检测|元素类型、坐标、置信度|`List<Layout>`，含label（标题/段落/表格等）、bbox矩形坐标、置信度|
-|表格检测|表格区域、置信度|`List<DetectionResult>`，含表格矩形区域、识别置信度|
-|表格识别（2\.1\.0及以上升级）|表格结构、坐标、行列信息|`TableResult`，支持**HTML格式**（网页渲染）\+**JSON格式**（行列结构化数据）双输出，含坐标、耗时、行列数|
+### 1. 通用 OCR
 
----
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    List<Pair<Text, Box>> results = ocr.recognizeGeneralText("general.png");
+    for (Pair<Text, Box> item : results) {
+        System.out.println(item.getLeft().getText());            // 文本内容
+        System.out.println(item.getRight().getScore());          // 置信度
+        System.out.println(item.getRight().getLinePosition());   // 8 点坐标
+    }
+}
+```
+
+### 2. 手写 OCR
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    List<Pair<Text, Box>> results = ocr.recognizeHandwrittenText("handwriting.jpg");
+    for (Pair<Text, Box> item : results) {
+        System.out.println(item.getLeft().getText());
+    }
+}
+```
+
+### 3. 版面检测
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    List<Layout> layouts = ocr.detectLayout("layout.png");
+    for (Layout l : layouts) {
+        System.out.println(l.getLabel() + "，置信度：" + l.getConfidence()); // 元素类型、置信度
+        System.out.println(Arrays.toString(l.getBbox()));                     // 矩形坐标
+    }
+}
+```
+
+### 4. 文本行检测
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    Boxes boxes = ocr.detectTextLines("general.png");
+    for (Box box : boxes.getBoxes()) {
+        System.out.println(Arrays.toString(box.getLinePosition()));           // 8 点坐标
+    }
+}
+```
+
+### 5. 表格检测
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    List<DetectionResult> tables = ocr.detectTables("table.png");
+    for (DetectionResult t : tables) {
+        System.out.println(t.getClassLabel() + "，置信度：" + t.getConfidence());
+        System.out.println(t.getRect());                                      // 表格区域
+    }
+}
+```
+
+### 6. 表格识别（两步：OCR + 结构识别）
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    // 第一步：通用 OCR 提取文字
+    List<Pair<Text, Box>> ocrResults = ocr.recognizeGeneralText("table.png");
+    // 第二步：识别表格结构
+    TableResult table = ocr.recognizeTableFromOCR("table.png", ocrResults);
+    System.out.println(table.getHtml());        // HTML 结果
+    System.out.println(table.getTableJson());   // 结构化 JSON（行列数据）
+}
+```
+
+### 7. 表格一键检测 + 识别
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    List<TableResult> tables = ocr.recognizeTables("table.png");
+    for (TableResult t : tables) {
+        System.out.println(t.getHtml());
+        System.out.println(t.getTableJson());
+    }
+}
+```
+
+### 8. PDF 识别
+
+```java
+try (JiaJiaOCR ocr = JiaJiaOCR.builder()) {
+    List<String> pageImages = PdfConvert.convertPdfToImages("doc.pdf", "pdf_images");
+    for (String img : pageImages) {
+        List<Pair<Text, Box>> results = ocr.recognizeGeneralText(img);
+        for (Pair<Text, Box> item : results) {
+            System.out.println(item.getLeft().getText());
+        }
+    }
+}
+```
+
+### 9. 任务取消 & 多线程批量
+
+```java
+// 任务取消：传入 CancellationToken，在其它线程调用 cancel() 即可中断
+CancellationToken token = new CancellationToken();
+new Thread(token::cancel).start();
+ocr.recognizeGeneralText("general.png", token);
+
+// 多线程批量：共享同一个实例（预热后并发调用即可）
+JiaJiaOCR sharedOcr = JiaJiaOCR.builder();
+sharedOcr.recognizeGeneralText("general.png");   // 预热，完成模型加载
+// 之后可在多个线程中并发调用 sharedOcr.recognizeGeneralText(...)
+```
+
+> 完整可运行示例见 [src/test/java/JiaJiaOCRFullTest.java](src/test/java/JiaJiaOCRFullTest.java)。
+
+## 📦 版本说明
+
+| 版本 | 大小 | 核心功能 | JDK |
+| --- | --- | --- | --- |
+| 🔥 轻量版（1.0+） | 21 MB+ | 通用 OCR、PDF 识别 | 8+ |
+| ⚡ 全功能版（2.0.x / 2.1.0 / 2.2.0） | 200 MB+ | 通用 OCR + 手写 OCR + 版面检测 + 表格识别 + PDF 识别 | 2.0.x：8+；2.1.0 / 2.2.0：11+ |
+
+**v2.2.0**（推荐）全面兼容 **x86_64 与 ARM**，深度适配国产信创环境。
+
+### 更新日志
+
+- **v1.0.1** — 英文 OCR 空白识别返回空串而非 `null`。
+- **v1.0.2** — 新增多页 PDF 文字提取。
+- **v2.0.x** — 模型懒加载、手写 OCR、版面检测、表格检测与识别、坐标输出、HTML 表格输出。
+- **v2.1.0** — 内存优化、表格 **JSON** 结构化输出、任务取消、多线程批量处理。
+- **v2.2.0** — x86_64 与 ARM 全架构支持、信创环境适配。
+
+## 📊 返回数据
+
+| 功能模块 | 返回类型 | 说明 |
+| --- | --- | --- |
+| 通用 / 手写 OCR | `List<Pair<Text, Box>>` | `Text`：文本内容；`Box`：置信度 + 8 点坐标。 |
+| 版面检测 | `List<Layout>` | label（标题/段落/表格等）、bbox 坐标、置信度。 |
+| 表格检测 | `List<DetectionResult>` | 表格矩形区域、类别、置信度。 |
+| 表格识别 | `TableResult` | `getHtml()` + `getTableJson()` 双输出，含坐标、耗时。 |
 
 ## 🖼️ 效果展示
 
-各功能模块识别效果预览：
+| 通用 OCR | 手写 OCR |
+| --- | --- |
+| <img src="docs/images/generalocr.png" alt="通用OCR效果" width="400"/> | <img src="docs/images/handwritingocr.png" alt="手写OCR效果" width="400"/> |
 
-### 📝 通用OCR效果
-<img src="generalocr.png" alt="通用OCR效果" width="800"/>
-
-### ✍️ 手写OCR效果
-<img src="handwrittingocr.png" alt="手写OCR效果" width="800"/>
-
-### 📋 版面检测效果
-<img src="layout.png" alt="版面检测效果" width="800"/>
-
-### 📊 表格检测效果
-<img src="table_det.png" alt="表格检测效果" width="800"/>
-
-### 📈 表格识别效果
-<img src="table_rec.png" alt="表格识别效果" width="800"/>
-
----
+| 版面检测 | 表格检测 | 表格识别 |
+| --- | --- | --- |
+| <img src="docs/images/layout.png" alt="版面检测效果" width="260"/> | <img src="docs/images/table_det.png" alt="表格检测效果" width="260"/> | <img src="docs/images/table_rec.png" alt="表格识别效果" width="260"/> |
 
 ## 📞 联系方式
 
-如有功能建议、问题反馈或技术交流，欢迎随时联系：
-
-- 🐙 **GitHub**：[jiangnanboy](https://github.com/jiangnanboy)
-
-- 💬 **QQ**：2229029156
-
-- 📧 **Email**：2229029156@qq\.com
+- 🐙 GitHub：[jiangnanboy](https://github.com/jiangnanboy)
+- 💬 QQ：2229029156
+- 📧 Email：2229029156@qq.com
 
 ## ⭐ 支持项目
 
-如果本项目对你有帮助，欢迎点亮 **Star**，您的支持是项目持续迭代优化的最大动力 ❤️
----
-
-[![GitHub stars](https://img.shields.io/github/stars/jiangnanboy/JiaJiaOCR?style=social)](https://github.com/jiangnanboy/JiaJiaOCR/stargazers)
+如果本项目对你有帮助，欢迎点亮 **Star**，您的支持是项目持续迭代优化的最大动力！❤️
