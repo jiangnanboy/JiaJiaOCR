@@ -305,11 +305,11 @@ sharedOcr.recognizeGeneralText("general.png");   // 预热，完成模型加载
 
 | 通用 OCR | 手写 OCR |
 | --- | --- |
-| <img src="docs/images/generalocr.png" alt="通用OCR效果" width="400"/> | <img src="docs/images/handwritingocr.png" alt="手写OCR效果" width="400"/> |
+| <img src="generalocr.png" alt="通用OCR效果" width="400"/> | <img src="handwritingocr.png" alt="手写OCR效果" width="400"/> |
 
 | 版面检测 | 表格检测 | 表格识别 |
 | --- | --- | --- |
-| <img src="docs/images/layout.png" alt="版面检测效果" width="260"/> | <img src="docs/images/table_det.png" alt="表格检测效果" width="260"/> | <img src="docs/images/table_rec.png" alt="表格识别效果" width="260"/> |
+| <img src="layout.png" alt="版面检测效果" width="260"/> | <img src="table_det.png" alt="表格检测效果" width="260"/> | <img src="table_rec.png" alt="表格识别效果" width="260"/> |
 
 ## 📞 联系方式
 

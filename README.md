@@ -305,11 +305,11 @@ sharedOcr.recognizeGeneralText("general.png");   // warm up: load models once
 
 | General OCR | Handwritten OCR |
 | --- | --- |
-| <img src="docs/images/generalocr.png" alt="general OCR" width="400"/> | <img src="docs/images/handwritingocr.png" alt="handwriting OCR" width="400"/> |
+| <img src="generalocr.png" alt="general OCR" width="400"/> | <img src="handwritingocr.png" alt="handwriting OCR" width="400"/> |
 
 | Layout detection | Table detection | Table recognition |
 | --- | --- | --- |
-| <img src="docs/images/layout.png" alt="layout detection" width="260"/> | <img src="docs/images/table_det.png" alt="table detection" width="260"/> | <img src="docs/images/table_rec.png" alt="table recognition" width="260"/> |
+| <img src="layout.png" alt="layout detection" width="260"/> | <img src="table_det.png" alt="table detection" width="260"/> | <img src="table_rec.png" alt="table recognition" width="260"/> |
 
 ## 📞 Contact
 
